@@ -1,0 +1,22 @@
+{
+  "name": "meal-reviews-in-ranking",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ibu00024/meal-reviews-in-ranking.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ibu00024/meal-reviews-in-ranking/issues"
+  },
+  "homepage": "https://github.com/ibu00024/meal-reviews-in-ranking#readme",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
