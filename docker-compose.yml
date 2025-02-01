@@ -1,4 +1,4 @@
-version: 3.0.0
+# version: 3.0.0
 services:
   db:
     image: mysql:8.0.32
@@ -19,4 +19,26 @@ services:
     ports:
       - 8080:80
     links:
+      - db
+
+  server:
+    image: node:16.14.0
+    working_dir: /server
+    tty: true
+    ports: 
+    - '3000:3000'
+    volumes:
+      - ./:/server
+    command: >
+      bash -c "npm install &&
+      npm install nodemon -g &&
+      npm install cors mysql2 &&
+      nodemon server/app.js"
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=P@ssw0rd
+      - DB_NAME=MealReview
+      - PORT=3000
+    depends_on:
       - db
