@@ -1,0 +1,22 @@
+version: 3.0.0
+services:
+  db:
+    image: mysql:8.0.32
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=P@ssw0rd
+      - MYSQL_DATABASE=MealReview
+    volumes:
+        - ./database:/docker-entrypoint-initdb.d
+
+  phpmyadmin:
+  # Username: root
+  # Password: P@ssw0rd
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    links:
+      - db
