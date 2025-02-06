@@ -1,8 +1,9 @@
 import {DataSource, Repository} from "typeorm";
-import {inject} from "inversify";
+import {inject, injectable} from "inversify";
 import SERVICE_IDENTIFIER from "../constants/identifiers";
 import {Restaurant} from "../models/restaurant";
 
+@injectable()
 class RestaurantRepository {
     private restaurantRepo: Repository<Restaurant>;
 
