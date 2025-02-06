@@ -1,4 +1,4 @@
-import "reflect-metadata"
+import "reflect-metadata";
 
 import container from "./config/ioc_config";
 import SERVICE_IDENTIFIER from "./constants/identifiers";
@@ -6,7 +6,7 @@ import Config from "./config/config";
 import express from "express";
 import restaurantRoutes from "./routes/restaurantRoutes.js";
 
-let config = container.get<Config>(SERVICE_IDENTIFIER.CONFIG)
+let config = container.get<Config>(SERVICE_IDENTIFIER.CONFIG);
 
 const app = express();
 app.use(express.json());
