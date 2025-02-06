@@ -5,11 +5,14 @@ import { Request, Response } from "express";
 
 @injectable()
 class RestaurantController {
+    private restaurantService: RestaurantService;
 
     constructor(
-        @inject(SERVICE_IDENTIFIER.RESTAURANT_SERVICE) private restaurantService: RestaurantService
+        @inject(SERVICE_IDENTIFIER.RESTAURANT_SERVICE) restaurantService: RestaurantService
     ) {
+        this.restaurantService = restaurantService;
 
+        this.getAllRestaurants = this.getAllRestaurants.bind(this);
     }
 
     public async getAllRestaurants(req: Request, res: Response) {

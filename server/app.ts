@@ -1,3 +1,5 @@
+import "reflect-metadata"
+
 import container from "./config/ioc_config";
 import SERVICE_IDENTIFIER from "./constants/identifiers";
 import Config from "./config/config";
@@ -10,7 +12,7 @@ const app = express();
 app.use(express.json());
 
 // Register routes
-app.use("/api", restaurantRoutes);
+app.use("/restaurant", restaurantRoutes);
 
 const PORT = config.serverConfig.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
