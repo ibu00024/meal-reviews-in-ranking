@@ -26,6 +26,7 @@ class MySQLConnection {
             console.log("Data Source has been initialized!")
         })
         .catch((err) => {
+            console.log("Data Source has not been initialized!");
             throw err;
         });
     }
