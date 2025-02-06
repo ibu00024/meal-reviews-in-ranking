@@ -10,15 +10,15 @@ class MySQLConnection {
     private connection: DataSource;
 
     constructor(
-        @inject(SERVICE_IDENTIFIER.CONFIG) private config: Config
+        @inject(SERVICE_IDENTIFIER.CONFIG) config: Config
     ) {
         this.connection = new DataSource({
             type: "mysql",
-            host: this.config.databaseConfig.MYSQL_HOST,
-            port: this.config.databaseConfig.MYSQL_PORT,
-            username: this.config.databaseConfig.MYSQL_USERNAME,
-            password: this.config.databaseConfig.MYSQL_PASSWORD,
-            database: this.config.databaseConfig.MYSQL_DATABASE,
+            host: config.databaseConfig.MYSQL_HOST ?? "localhost",
+            port: config.databaseConfig.MYSQL_PORT ?? 3306,
+            username: config.databaseConfig.MYSQL_USERNAME ?? "root",
+            password: config.databaseConfig.MYSQL_PASSWORD ?? "P@ssw0rd",
+            database: config.databaseConfig.MYSQL_DATABASE ?? "MealReview",
             entities: ["models/*.ts"],
             synchronize: false,
         });

@@ -1,9 +1,9 @@
 class DatabaseConfig {
-    MYSQL_HOST: string = "localhost";
-    MYSQL_PORT: number = 3306;
-    MYSQL_USERNAME: string = "user";
-    MYSQL_PASSWORD: string = "password";
-    MYSQL_DATABASE: string = "mydatabase";
+    MYSQL_HOST: string | undefined;
+    MYSQL_PORT: number | undefined;
+    MYSQL_USERNAME: string | undefined;
+    MYSQL_PASSWORD: string | undefined;
+    MYSQL_DATABASE: string | undefined;
 }
 
 export default DatabaseConfig;

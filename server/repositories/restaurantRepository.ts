@@ -9,7 +9,7 @@ class RestaurantRepository {
     private restaurantRepo: Repository<Restaurant>;
 
     constructor(
-        @inject(SERVICE_IDENTIFIER.MYSQL_CONNECTION) private mysqlConnection: MySQLConnection
+        @inject(SERVICE_IDENTIFIER.MYSQL_CONNECTION) mysqlConnection: MySQLConnection
     ) {
         const connection = mysqlConnection.getConnection()
         this.restaurantRepo = connection.getRepository(Restaurant);
