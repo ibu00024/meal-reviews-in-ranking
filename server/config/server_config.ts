@@ -1,5 +1,5 @@
 class ServerConfig {
-    SERVER_PORT: number | undefined;
+    PORT: number | undefined;
 }
 
 export default ServerConfig;
