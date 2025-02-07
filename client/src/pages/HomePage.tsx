@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import "../index.css";
-import StarRating from "./StarRating";
+import RestaurantCard from "../components/RestaurantCard";
 
 interface Restaurant {
     name: string;
@@ -64,20 +64,10 @@ const HomePage = () => {
                 <p>error: {error}</p>
             ) : (
                 <div className="content-grid">
-                    {restaurants.map((restaurant, index) => (
-                        <div key={index} className="card">
-                            <div className="card-image">
-                                <img src={restaurant.imageUrl} alt={restaurant.name} />
-                            </div>
-                            <h2 className="card-title">{restaurant.name}</h2>
-                            <p className="card-location">{restaurant.location}</p>
-                            <div className="card-rating">
-                                <span className="rating-text">{restaurant.rating.toFixed(1)}/5</span>
-                                <StarRating rating={restaurant.rating} />
-                            </div>
-                        </div>
-                    ))}
-                </div>
+                {restaurants.map((restaurant, index) => (
+                  <RestaurantCard key={index} restaurant={restaurant} />
+                ))}
+              </div>
             )}
         </div>
     );
