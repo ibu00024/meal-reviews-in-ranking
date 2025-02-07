@@ -6,6 +6,7 @@ const SERVICE_IDENTIFIER = {
   RESTAURANT_SERVICE: Symbol.for("RestaurantService"),
   RESTAURANT_CONTROLLER: Symbol.for("RestaurantController"),
   IMAGE_CONTROLLER: Symbol.for("ImageController"),
+  IMAGE_SERVICE: Symbol.for("ImageService"),
   IMAGE_REPOSITORY: Symbol.for("ImageRepository"),
 };
 

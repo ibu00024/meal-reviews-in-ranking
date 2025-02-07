@@ -18,7 +18,8 @@ class RestaurantController {
 
   public async getAllRestaurants(req: Request, res: Response) {
     try {
-      const restaurants = await this.restaurantService.getAllRestaurantByRanking();
+      const restaurants =
+        await this.restaurantService.getAllRestaurantByRanking();
       res.status(200).json({ success: true, data: restaurants });
     } catch (error) {
       res.status(500).json({

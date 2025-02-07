@@ -10,6 +10,7 @@ import RestaurantController from "../controllers/restaurantController";
 import MinioConnection from "../utils/minioConnection";
 import ImageController from "../controllers/imageController";
 import ImageRepository from "../repositories/imageRepository";
+import ImageService from "../services/imageService";
 
 let container = new Container();
 
@@ -19,9 +20,9 @@ container
   .to(MySQLConnection)
   .inSingletonScope();
 container
-    .bind<MinioConnection>(SERVICE_IDENTIFIER.MINIO_CONNECTION)
-    .to(MinioConnection)
-    .inSingletonScope();
+  .bind<MinioConnection>(SERVICE_IDENTIFIER.MINIO_CONNECTION)
+  .to(MinioConnection)
+  .inSingletonScope();
 container
   .bind<RestaurantRepository>(SERVICE_IDENTIFIER.RESTAURANT_REPOSITORY)
   .to(RestaurantRepository)
@@ -35,10 +36,15 @@ container
   .to(RestaurantController)
   .inSingletonScope();
 container
-    .bind<ImageController>(SERVICE_IDENTIFIER.IMAGE_CONTROLLER)
-    .to(ImageController)
-    .inSingletonScope()
-container.bind<ImageRepository>(SERVICE_IDENTIFIER.IMAGE_REPOSITORY)
-    .to(ImageRepository)
-    .inSingletonScope();
+  .bind<ImageController>(SERVICE_IDENTIFIER.IMAGE_CONTROLLER)
+  .to(ImageController)
+  .inSingletonScope();
+container
+  .bind<ImageService>(SERVICE_IDENTIFIER.IMAGE_SERVICE)
+  .to(ImageService)
+  .inSingletonScope();
+container
+  .bind<ImageRepository>(SERVICE_IDENTIFIER.IMAGE_REPOSITORY)
+  .to(ImageRepository)
+  .inSingletonScope();
 export default container;
