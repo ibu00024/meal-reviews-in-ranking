@@ -1,15 +1,17 @@
 import "reflect-metadata";
 
-import DatabaseConfig from "./database_config";
+import DatabaseConfig from "./databaseConfig";
 import { plainToClass } from "class-transformer";
 import { injectable } from "inversify";
 import * as dotenv from "dotenv";
-import ServerConfig from "./server_config";
+import ServerConfig from "./serverConfig";
+import MinioConfig from "./minioConfig";
 
 @injectable()
 class Config {
   databaseConfig: DatabaseConfig;
   serverConfig: ServerConfig;
+  minioConfig: MinioConfig;
 
   constructor() {
     const processEnv: { [key: string]: any } = {};
@@ -17,6 +19,7 @@ class Config {
 
     this.databaseConfig = plainToClass(DatabaseConfig, processEnv);
     this.serverConfig = plainToClass(ServerConfig, processEnv);
+    this.minioConfig = plainToClass(MinioConfig, processEnv);
   }
 }
 

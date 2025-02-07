@@ -7,6 +7,7 @@ import MySQLConnection from "../utils/mySQLConnection";
 import RestaurantRepository from "../repositories/restaurantRepository";
 import RestaurantService from "../services/restaurantService";
 import RestaurantController from "../controllers/restaurantController";
+import MinioConnection from "../utils/minioConnection";
 
 let container = new Container();
 
@@ -15,6 +16,10 @@ container
   .bind<MySQLConnection>(SERVICE_IDENTIFIER.MYSQL_CONNECTION)
   .to(MySQLConnection)
   .inSingletonScope();
+container
+    .bind<MinioConnection>(SERVICE_IDENTIFIER.MINIO_CONNECTION)
+    .to(MinioConnection)
+    .inSingletonScope();
 container
   .bind<RestaurantRepository>(SERVICE_IDENTIFIER.RESTAURANT_REPOSITORY)
   .to(RestaurantRepository)

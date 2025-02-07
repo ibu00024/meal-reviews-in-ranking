@@ -20,3 +20,14 @@ services:
       - 8080:80
     links:
       - db
+
+  minio:
+    image: docker.io/bitnami/minio:2022
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    environment:
+      - MINIO_ROOT_USER=root
+      - MINIO_ROOT_PASSWORD=P@ssw0rd
+      - MINIO_DEFAULT_BUCKETS=review-image
+
