@@ -34,9 +34,8 @@ class RestaurantController {
   public async searchRestaurant(req: Request, res: Response) {
     try {
       const name = req.query.name as string;
-
       if (!name) {
-        return res.status(400).json({
+        res.status(400).json({
           success: false,
           message: "Bad Request",
           error: "Name is required in query params",

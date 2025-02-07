@@ -22,13 +22,17 @@ class RestaurantRepository {
     });
   }
 
-  public async searchRestaurants(keyword: string): Promise<Restaurant[]> {
+  public async searchRestaurants(
+    keyword: string,
+    size: number,
+  ): Promise<Restaurant[]> {
     return await this.restaurantRepo
       .createQueryBuilder("restaurant")
       .where(
         "MATCH (restaurant.name) AGAINST (:keyword IN NATURAL LANGUAGE MODE)",
         { keyword },
       )
+      .limit(size)
       .getMany();
   }
 }
