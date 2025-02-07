@@ -53,6 +53,10 @@ class RestaurantService {
     }
     return restaurants;
   }
+
+  public async searchRestaurant(keyword: string) {
+    return await this.restaurantRepository.searchRestaurants(keyword);
+  }
 }
 
 export default RestaurantService;
