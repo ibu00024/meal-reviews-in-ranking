@@ -19,12 +19,10 @@ class RestaurantRepository {
     this.reviewRepo = connection.getRepository(Review);
   }
 
-  public async getAllRestaurants() {
-    console.log(this.restaurantRepo.createQueryBuilder("review")
-        .leftJoinAndSelect("review.restaurant", "restaurant") // ✅ Join restaurant
-        .leftJoinAndSelect("review.category", "category") // ✅ Join category
-        .getMany());
-    return await this.reviewRepo.find();
+  public async getAllRestaurantsWithReviews(): Promise<Restaurant[]> {
+    return this.restaurantRepo.find({
+      relations: ["reviews"],
+    });
   }
 }
 
