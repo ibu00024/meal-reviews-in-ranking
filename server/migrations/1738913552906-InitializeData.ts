@@ -24,6 +24,10 @@ export class InitializeData1738913552906 implements MigrationInterface {
                 (2, 'Olympus Extra', 'User2', 3, 1300, 'This is ok', 'https://lh3.googleusercontent.com/p/AF1QipM4xkxd-mfDRgCr2Q8Sp7W8HMNA1YZ0ddG0YdEi=s1360-w1360-h1020', 1, 1),
                 (3, 'Tempura Soba', 'User3', 0, 1000, 'Its really bad', 'https://lh3.googleusercontent.com/p/AF1QipMhGsaHIj6El3UaekQwuE92aV4zDyQ78mrt_wjX=s1360-w1360-h1020', 2, 2);
             `)
+
+        await queryRunner.query(`
+            ALTER TABLE restaurant ADD FULLTEXT(name)
+        `)
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
