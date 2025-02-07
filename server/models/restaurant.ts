@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {Review} from "./review";
 
 @Entity()
 export class Restaurant {
@@ -10,4 +11,7 @@ export class Restaurant {
 
   @Column({ type: "varchar", length: 255 })
   location!: string;
+
+  @OneToMany(() => Review, (review) => review.restaurant)
+  reviews!: Review[];
 }

@@ -16,8 +16,10 @@ class RestaurantRepository {
     this.restaurantRepo = connection.getRepository(Restaurant);
   }
 
-  public async getAllRestaurants() {
-    return await this.restaurantRepo.find();
+  public async getAllRestaurantsWithReviews(): Promise<Restaurant[]> {
+    return this.restaurantRepo.find({
+      relations: ["reviews"],
+    });
   }
 }
 
