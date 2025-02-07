@@ -8,8 +8,8 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=P@ssw0rd
       - MYSQL_DATABASE=MealReview
-    volumes:
-        - ./database:/docker-entrypoint-initdb.d
+#    volumes:
+#        - ./database:/docker-entrypoint-initdb.d
 
   phpmyadmin:
   # Username: root

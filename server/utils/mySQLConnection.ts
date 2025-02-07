@@ -18,12 +18,18 @@ class MySQLConnection {
       password: config.databaseConfig.MYSQL_PASSWORD ?? "P@ssw0rd",
       database: config.databaseConfig.MYSQL_DATABASE ?? "MealReview",
       entities: ["models/*.ts"],
-      synchronize: false,
+      migrations: ["migrations/*.ts"],
+      synchronize: config.serverConfig.DEBUG,
     });
     this.connection
       .initialize()
       .then(() => {
         console.log("Data Source has been initialized!");
+        if (config.serverConfig.DEBUG) {
+          this.connection.runMigrations().then(() => {
+            console.log("Migrations have been run!");
+          });
+        }
       })
       .catch((err) => {
         console.log("Data Source has not been initialized!");
