@@ -5,6 +5,7 @@ class MinioConfig {
     MINIO_PORT: number | undefined;
     MINIO_USERNAME: string | undefined;
     MINIO_PASSWORD: string | undefined;
+    MINIO_BUCKET: string | undefined;
     @Transform(({ value }) => value === "true")
     USE_SSL: boolean = false;
 }

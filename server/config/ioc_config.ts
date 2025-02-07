@@ -8,6 +8,8 @@ import RestaurantRepository from "../repositories/restaurantRepository";
 import RestaurantService from "../services/restaurantService";
 import RestaurantController from "../controllers/restaurantController";
 import MinioConnection from "../utils/minioConnection";
+import ImageController from "../controllers/imageController";
+import ImageRepository from "../repositories/imageRepository";
 
 let container = new Container();
 
@@ -32,5 +34,11 @@ container
   .bind<RestaurantController>(SERVICE_IDENTIFIER.RESTAURANT_CONTROLLER)
   .to(RestaurantController)
   .inSingletonScope();
-
+container
+    .bind<ImageController>(SERVICE_IDENTIFIER.IMAGE_CONTROLLER)
+    .to(ImageController)
+    .inSingletonScope()
+container.bind<ImageRepository>(SERVICE_IDENTIFIER.IMAGE_REPOSITORY)
+    .to(ImageRepository)
+    .inSingletonScope();
 export default container;

@@ -5,6 +5,8 @@ const SERVICE_IDENTIFIER = {
   RESTAURANT_REPOSITORY: Symbol.for("RestaurantRepository"),
   RESTAURANT_SERVICE: Symbol.for("RestaurantService"),
   RESTAURANT_CONTROLLER: Symbol.for("RestaurantController"),
+  IMAGE_CONTROLLER: Symbol.for("ImageController"),
+  IMAGE_REPOSITORY: Symbol.for("ImageRepository"),
 };
 
 export default SERVICE_IDENTIFIER;

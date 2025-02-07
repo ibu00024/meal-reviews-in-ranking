@@ -8,8 +8,10 @@ import {Client} from "minio";
 @injectable()
 class MinioConnection {
     private minioClient: Client;
+    private config: Config;
 
     constructor(@inject(SERVICE_IDENTIFIER.CONFIG) config: Config) {
+        this.config = config;
         this.minioClient = new Client({
             endPoint: config.minioConfig.MINIO_ENDPOINT || "localhost", // Change to your MinIO server address
             port: config.minioConfig.MINIO_PORT || 9000, // MinIO default port
@@ -26,7 +28,19 @@ class MinioConnection {
             console.error("MinIO Connection Failed:", error);
             throw error;
         }
+
+        const bucketName = this.config.minioConfig.MINIO_BUCKET || "review-image";
+        this.minioClient.bucketExists(bucketName).then(exists => {
+            if (!exists) {
+                throw new Error(`Bucket "${bucketName}" does not exist.`);
+            }
+        });
+
     }
+
+    public getClient(): Client {
+        return this.minioClient;
+    };
 }
 
 export default MinioConnection;
