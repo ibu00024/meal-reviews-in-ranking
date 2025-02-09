@@ -3,16 +3,21 @@ import SERVICE_IDENTIFIER from "../constants/identifiers";
 import RestaurantRepository from "../repositories/restaurantRepository";
 import { Restaurant } from "../models/restaurant";
 import HomePageRestaurantData from "../models/homePageRestaurantData";
+import Config from "../config/config";
 
 @injectable()
 class RestaurantService {
   private restaurantRepository: RestaurantRepository;
+  private config: Config;
 
   constructor(
     @inject(SERVICE_IDENTIFIER.RESTAURANT_REPOSITORY)
     restaurantRepository: RestaurantRepository,
+    @inject(SERVICE_IDENTIFIER.CONFIG)
+    config: Config,
   ) {
     this.restaurantRepository = restaurantRepository;
+    this.config = config;
   }
 
   public async getAllRestaurantByRanking() {
@@ -52,6 +57,14 @@ class RestaurantService {
       restaurant.restaurantLocation = "Tokyo, Japan";
     }
     return restaurants;
+  }
+
+  public async searchRestaurant(keyword: string) {
+    const searchLimitSize = this.config.serverConfig.SEARCH_LIMIT;
+    return await this.restaurantRepository.searchRestaurants(
+      keyword,
+      searchLimitSize,
+    );
   }
 }
 
