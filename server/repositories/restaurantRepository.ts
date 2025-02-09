@@ -21,6 +21,20 @@ class RestaurantRepository {
       relations: ["reviews"],
     });
   }
+
+  public async searchRestaurants(
+    keyword: string,
+    size: number,
+  ): Promise<Restaurant[]> {
+    return await this.restaurantRepo
+      .createQueryBuilder("restaurant")
+      .where(
+        "MATCH (restaurant.name) AGAINST (:keyword IN NATURAL LANGUAGE MODE)",
+        { keyword },
+      )
+      .limit(size)
+      .getMany();
+  }
 }
 
 export default RestaurantRepository;
