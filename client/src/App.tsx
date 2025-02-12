@@ -1,10 +1,10 @@
 // import React from "react";
 import HomePage from "./pages/HomePage";
-// import RestaurantPage from "./pages/RestaurantPage.tsx";
+import { FormDataForm } from "./pages/ReviewPage";
 
 const App = () => {
-  return <HomePage />;
-  // return <RestaurantPage />;
+  //return <HomePage />;
+  return <FormDataForm />
 };
 
 export default App;
