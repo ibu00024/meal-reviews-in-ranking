@@ -2,8 +2,9 @@ import {inject, injectable} from "inversify";
 import SERVICE_IDENTIFIER from "../constants/identifiers";
 import RestaurantRepository from "../repositories/restaurantRepository";
 import {Restaurant} from "../models/restaurant";
-import HomePageRestaurantData from "../models/homePageRestaurantData";
+import HomePageDTO from "../models/DTO/homePageDTO";
 import Config from "../config/config";
+import {Review} from "../models/review";
 
 @injectable()
 class RestaurantService {
@@ -29,23 +30,66 @@ class RestaurantService {
     )
   }
 
+  public async getRestaurantById(id: number) {
+    const restaurantWithReview = await this.restaurantRepository.getRestaurant(id)
+    if (!restaurantWithReview || restaurantWithReview.reviews.length === 0) {
+      throw Error(`Restaurant with id ${id} not found`);
+    }
+    return this.getReviewPageDTO(restaurantWithReview);
+  }
+
+  private getReviewsDTO(reviews: Review[]) {
+    return reviews.map(review => {
+      return new ReviewDTO(review.review_id,
+          review.name,
+          review.reviewer_name,
+          review.rating,
+          review.price,
+          review.comment,
+          review.picture_url)
+    })
+  }
+
+  private getReviewPageDTO(restaurant: Restaurant) {
+    const coverImage = this.getCoverImageUrl(restaurant);
+    const averageRating = this.calculateAverageReview(restaurant);
+    const restaurantAddress = this.getRestaurantAddress(restaurant)
+    const reviewDTO = this.getReviewsDTO(restaurant.reviews);
+    return new ReviewPageDTO(
+        restaurant.restaurant_id,
+        restaurant.name,
+        coverImage,
+        averageRating,
+        restaurant.location,
+        restaurantAddress,
+        restaurant.lat,
+        restaurant.lon,
+        reviewDTO
+    )
+  }
+
   public completeRestaurantData(restaurants: Restaurant[]) {
     const restaurantWithRating = restaurants.map((restaurant) => {
       const averageReview = this.calculateAverageReview(restaurant);
-      const imageUrl = this. getCoverImageUrl(restaurant)
-      return new HomePageRestaurantData(
+      const imageUrl = this.getCoverImageUrl(restaurant)
+      const restaurantAddress = this.getRestaurantAddress(restaurant)
+      return new HomePageDTO(
         restaurant.restaurant_id,
         restaurant.name,
           imageUrl,
         averageReview,
         restaurant.location,
-        restaurant.city + ", " + restaurant.country,
+          restaurantAddress,
       );
     });
 
     return restaurantWithRating.sort(
       (a, b) => (b.averageRating ?? 0) - (a.averageRating ?? 0),
     );
+  }
+
+  private getRestaurantAddress(restaurant: Restaurant) {
+    return restaurant.city + ", " + restaurant.country;
   }
 
   private validateRestaurantReviews(restaurantData: Restaurant[]) {
@@ -62,14 +106,12 @@ class RestaurantService {
   }
 
   private calculateAverageReview(restaurant: Restaurant) {
-    const averageReview =
-        restaurant.reviews
-            .map((review) => review.rating)
-            .reduce((sum, rating) => sum + rating, 0) / restaurant.reviews.length;
-    return averageReview;
+    return restaurant.reviews
+        .map((review) => review.rating)
+        .reduce((sum, rating) => sum + rating, 0) / restaurant.reviews.length;
   }
 
-  public async completeRestaurantData2(restaurants: HomePageRestaurantData[]) {
+  public async completeRestaurantData2(restaurants: HomePageDTO[]) {
     for (const restaurant of restaurants) {
       restaurant.coverImage =
         "https://www.google.com/url?sa=i&url=https%3A%2F%2Fcooking.nytimes.com%2Frecipes%2F1024748-shoyu-ramen&psig=AOvVaw1eoZWpT4yAjDHJQ94ZUO2s&ust=1739004242862000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCOjx6OiVsYsDFQAAAAAdAAAAABAE";

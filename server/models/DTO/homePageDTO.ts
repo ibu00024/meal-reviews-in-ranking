@@ -1,4 +1,4 @@
-class HomePageRestaurantData {
+class HomePageDTO {
   restaurantId: number | undefined;
   restaurantName: string | undefined;
   coverImage: string | undefined;
@@ -23,4 +23,4 @@ class HomePageRestaurantData {
   }
 }
 
-export default HomePageRestaurantData;
+export default HomePageDTO;
