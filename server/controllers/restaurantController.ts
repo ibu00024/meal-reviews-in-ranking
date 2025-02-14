@@ -36,7 +36,7 @@ class RestaurantController {
     try {
       const restaurantId = req.params.id as unknown as number;
       const restaurants =
-          await this.restaurantService.getRestaurantById(restaurantId);
+        await this.restaurantService.getRestaurantById(restaurantId);
       res.status(200).json({ success: true, data: restaurants });
     } catch (error) {
       res.status(500).json({

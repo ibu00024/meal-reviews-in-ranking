@@ -19,10 +19,10 @@ export class Restaurant {
   @Column({ type: "varchar", length: 255 })
   location!: string;
 
-  @Column({ type: "float"})
+  @Column({ type: "float" })
   lat!: number;
 
-  @Column({ type: "float"})
+  @Column({ type: "float" })
   lon!: number;
 
   @Column({ type: "varchar", length: 255 })
