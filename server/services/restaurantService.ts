@@ -5,6 +5,8 @@ import {Restaurant} from "../models/restaurant";
 import HomePageDTO from "../models/DTO/homePageDTO";
 import Config from "../config/config";
 import {Review} from "../models/review";
+import ReviewDTO from "../models/DTO/reviewDTO";
+import ReviewPageDTO from "../models/DTO/reviewPageDTO";
 
 @injectable()
 class RestaurantService {

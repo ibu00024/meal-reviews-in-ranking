@@ -26,3 +26,5 @@ class ReviewDTO {
         this.photoURL = photoURL;
     }
 }
+
+export default ReviewDTO

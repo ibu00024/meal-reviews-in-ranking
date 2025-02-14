@@ -15,12 +15,28 @@ class RestaurantController {
 
     this.getAllRestaurants = this.getAllRestaurants.bind(this);
     this.searchRestaurant = this.searchRestaurant.bind(this);
+    this.getRestaurantById = this.getRestaurantById.bind(this);
   }
 
   public async getAllRestaurants(req: Request, res: Response) {
     try {
       const restaurants =
         await this.restaurantService.getAllRestaurantByRanking();
+      res.status(200).json({ success: true, data: restaurants });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: "Internal Server Error",
+        error: (error as Error).message,
+      });
+    }
+  }
+
+  public async getRestaurantById(req: Request, res: Response) {
+    try {
+      const restaurantId = req.params.id as unknown as number;
+      const restaurants =
+          await this.restaurantService.getRestaurantById(restaurantId);
       res.status(200).json({ success: true, data: restaurants });
     } catch (error) {
       res.status(500).json({

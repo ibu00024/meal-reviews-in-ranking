@@ -1,3 +1,5 @@
+import ReviewDTO from "./reviewDTO";
+
 class ReviewPageDTO {
     restaurantId: number | undefined;
     restaurantName: string | undefined;
@@ -31,3 +33,5 @@ class ReviewPageDTO {
         this.reviews = reviews;
     }
 }
+
+export default ReviewPageDTO;

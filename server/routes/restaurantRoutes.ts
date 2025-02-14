@@ -10,5 +10,6 @@ const restaurantController = container.get<RestaurantController>(
 
 restaurantRouter.get("/", restaurantController.getAllRestaurants);
 restaurantRouter.get("/search", restaurantController.searchRestaurant);
+restaurantRouter.get("/:id", restaurantController.getRestaurantById);
 
 export default restaurantRouter;
