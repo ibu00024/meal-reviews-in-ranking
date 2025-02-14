@@ -1,0 +1,232 @@
+/* Global Styles (Dark Theme) */
+body {
+  font-family: "Arial", sans-serif;
+  background-color: #121212; /* Dark background */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Form Container (Dark Mode) */
+.form {
+  background: #1e1e1e; /* Dark background */
+  padding: 20px;
+  width: 400px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #333; /* Subtle border */
+}
+
+/* Form Title */
+.form__title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #fff; /* White text */
+  margin-bottom: 15px;
+}
+
+/* Form Group */
+.form__group {
+  margin-bottom: 15px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Labels */
+.form__label {
+  font-weight: bold;
+  color: #bbb; /* Light gray text */
+  margin-bottom: 5px;
+}
+
+/* Inputs, Select, and Textarea */
+.form__input,
+.form__textarea,
+.form__select {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #555; /* Darker border */
+  border-radius: 5px;
+  background: #2a2a2a; /* Darker input background */
+  color: #fff; /* White text */
+  transition: all 0.3s ease-in-out;
+  box-sizing: border-box;
+}
+
+.form__input:focus,
+.form__textarea:focus,
+.form__select:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Textarea */
+.form__textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+/* Star Rating */
+.star-rating {
+  display: flex;
+  gap: 5px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Star Rating */
+.star-rating {
+  display: flex;
+  gap: 5px;
+  font-size: 24px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.star {
+  transition: color 0.2s, transform 0.2s;
+}
+
+.star:hover {
+  transform: scale(1.2); /* Slight pop-up effect on hover */
+}
+
+.star-filled {
+  color: #ffd700; /* Gold for selected stars */
+}
+
+.star-empty {
+  color: #666; /* Dark gray for unselected stars */
+}
+
+/* Half-Star Adjustments */
+.half-star {
+  position: absolute;
+  left: 0;
+  width: 50%;
+  overflow: hidden;
+}
+
+
+/* Submit Button */
+.button {
+  background-color: #007bff;
+  color: white;
+  font-size: 16px;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  transition: 0.3s ease-in-out;
+  box-sizing: border-box;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+/* Dark Mode Modal Container */
+/* Dark Mode Modal Container */
+.modal-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.7); /* Dark semi-transparent overlay */
+  z-index: 1000;
+}
+
+/* Dark Mode Modal Container */
+.modal-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.7); /* Dark semi-transparent overlay */
+  z-index: 1000;
+}
+
+/* Dark Mode Modal Box */
+.modal-content {
+  background: #222; /* Dark box background */
+  padding: 25px;
+  border-radius: 12px;
+  text-align: center;
+  width: 400px;
+  box-shadow: 0 6px 15px rgba(255, 255, 255, 0.1);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center content */
+  border: 1px solid #444; /* Subtle border */
+}
+
+/* Centering Modal Icon */
+.modal-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 15px auto; /* Centers the icon */
+  display: block;
+}
+
+/* Success Title */
+.modal-title-success {
+  color: #4caf50; /* Green */
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Failure Title */
+.modal-title-fail {
+  color: #f44336; /* Red */
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Modal Text */
+.modal-text {
+  color: #ddd; /* Light gray */
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+/* Close Button */
+.modal-content button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  width: 120px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 15px;
+  font-size: 16px;
+  transition: 0.3s ease-in-out;
+}
+
+.modal-content button:hover {
+  background: #0056b3;
+}
