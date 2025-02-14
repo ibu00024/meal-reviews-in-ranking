@@ -21,10 +21,10 @@ class ImageService {
 
   public generateId(epoch: number = 1672531200000): string {
     const currentTimestamp = BigInt(Date.now());
-    const timestampBits = (currentTimestamp - BigInt(epoch)) << BigInt(12); // ✅ Shift left 12 bits (instead of 22)
+    const timestampBits = (currentTimestamp - BigInt(epoch)) << BigInt(12);
 
-    const sequence = BigInt(Math.floor(Math.random() * 4096)); // ✅ Random sequence (0-4095)
-    const id = timestampBits | sequence; // ✅ Remove machine ID bits
+    const sequence = BigInt(Math.floor(Math.random() * 4096));
+    const id = timestampBits | sequence;
 
     return id.toString();
   }
