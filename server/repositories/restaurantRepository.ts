@@ -22,6 +22,13 @@ class RestaurantRepository {
     });
   }
 
+  public async getRestaurant(restaurantId: number): Promise<Restaurant | null> {
+    return this.restaurantRepo.findOne({
+      relations: ["reviews"],
+      where: [{ restaurant_id: restaurantId }],
+    });
+  }
+
   public async searchRestaurants(
     keyword: string,
     size: number,
