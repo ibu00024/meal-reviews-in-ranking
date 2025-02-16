@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "../index.css";
 import RestaurantCard from "../components/RestaurantCard";
+import SearchBar from "../components/SearchBar";
 
 interface Restaurant {
     name: string;
@@ -33,6 +34,7 @@ const HomePage = () => {
     const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
         const loadData = async () => {
@@ -56,18 +58,28 @@ const HomePage = () => {
         loadData();
     }, []);
 
+    const filteredRestaurants =
+        searchQuery.trim() === ""
+            ? restaurants
+            : restaurants.filter((restaurant) =>
+                restaurant.name.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+
     return (
         <div className="page-container">
+            <div className="search-bar-container">
+                <SearchBar onSearch={setSearchQuery} />
+            </div>
             {loading ? (
                 <p>Loading...</p>
             ) : error ? (
                 <p>error: {error}</p>
             ) : (
                 <div className="content-grid">
-                {restaurants.map((restaurant, index) => (
-                  <RestaurantCard key={index} restaurant={restaurant} />
-                ))}
-              </div>
+                    {filteredRestaurants.map((restaurant, index) => (
+                        <RestaurantCard key={index} restaurant={restaurant} />
+                    ))}
+                </div>
             )}
         </div>
     );
