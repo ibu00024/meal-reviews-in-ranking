@@ -7,6 +7,7 @@ import express from "express";
 import restaurantRoutes from "./routes/restaurantRoutes.js";
 import MinioConnection from "./utils/minioConnection";
 import imageRoutes from "./routes/imageRoutes";
+import categoryRoutes from "./routes/categoryRoutes.js";
 
 let config = container.get<Config>(SERVICE_IDENTIFIER.CONFIG);
 
@@ -16,6 +17,7 @@ app.use(express.json());
 // Register routes
 app.use("/restaurant", restaurantRoutes);
 app.use("/image", imageRoutes);
+app.use("/category", categoryRoutes);
 
 container.get<MinioConnection>(SERVICE_IDENTIFIER.MINIO_CONNECTION);
 
