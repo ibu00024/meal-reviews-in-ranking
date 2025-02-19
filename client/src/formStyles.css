@@ -118,6 +118,20 @@ body {
   overflow: hidden;
 }
 
+.image-preview {
+  display: flex;
+  margin-top: 10px;
+  justify-content: center;
+}
+
+.preview-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 5px;
+  object-fit: cover;
+  border: 1px solid #666;
+}
+
 
 /* Submit Button */
 .button {
@@ -135,21 +149,6 @@ body {
 
 .button:hover {
   background-color: #0056b3;
-}
-
-/* Dark Mode Modal Container */
-/* Dark Mode Modal Container */
-.modal-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  width: 100vw;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background: rgba(0, 0, 0, 0.7); /* Dark semi-transparent overlay */
-  z-index: 1000;
 }
 
 /* Dark Mode Modal Container */
