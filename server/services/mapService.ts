@@ -6,9 +6,10 @@ class MapService {
 
   constructor() {}
 
+  // 📌 Get the latitude and longitude and RestaurantName from the Google Maps shortened URL
   public async getLatLonAndPlaceNameFromGoogleMapsShortUrl(shortUrl: string): Promise<{ lat: number, lon: number, restaurantName: string } | null> {
     try {
-      // 📌 Google Maps の短縮 URL を取得し、リダイレクト先の URL を取得
+      // 📌 Retrieve the Google Maps shortened URL and get the redirected URL
       const response = await axios.get(shortUrl, { maxRedirects: 0, validateStatus: status => status >= 300 && status < 400 });
       const redirectUrl = response.headers.location;
 
@@ -17,10 +18,12 @@ class MapService {
         return null;
       }
 
-      // 📌 `@lat,lon` の形式を抽出する正規表現
+      // 📌 Regular expression to extract the `@lat,lon` format
       const coordMatch = redirectUrl.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+      // 📌 Regular expression to extract the restaurantName format
       const nameMatch = redirectUrl.match(/\/place\/([^\/]+)/);
 
+      // 📌 Extract the latitude and longitude from the URL and return Restaurant Infos
       if (coordMatch) {
         const lat = parseFloat(coordMatch[1]);
         const lon = parseFloat(coordMatch[2]);
@@ -37,6 +40,7 @@ class MapService {
     }
   }
 
+  // 📌 Get the city and country from the coordinates using OpenStreetMap (Nominatim API)
   public async getCityAndCountryFromCoordinates(lat: number, lon: number): Promise<{ city: string, country: string }> {
     try {
 			const response = await axios.get(`https://nominatim.openstreetmap.org/reverse`, {
