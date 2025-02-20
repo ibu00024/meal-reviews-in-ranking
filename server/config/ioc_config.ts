@@ -11,6 +11,7 @@ import MinioConnection from "../utils/minioConnection";
 import ImageController from "../controllers/imageController";
 import ImageRepository from "../repositories/imageRepository";
 import ImageService from "../services/imageService";
+import MapService from "../services/mapService";
 import CategoryController from "../controllers/categoryController";
 import CategoryRepository from "../repositories/categoryRepository";
 
@@ -48,6 +49,10 @@ container
 container
   .bind<ImageRepository>(SERVICE_IDENTIFIER.IMAGE_REPOSITORY)
   .to(ImageRepository)
+  .inSingletonScope();
+container
+  .bind<MapService>(SERVICE_IDENTIFIER.MAP_SERVICE)
+  .to(MapService)
   .inSingletonScope();
 container
   .bind<CategoryController>(SERVICE_IDENTIFIER.CATEGORY_CONTROLLER)

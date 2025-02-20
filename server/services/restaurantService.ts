@@ -7,10 +7,14 @@ import Config from "../config/config";
 import { Review } from "../models/review";
 import ReviewDTO from "../models/DTO/reviewDTO";
 import ReviewPageDTO from "../models/DTO/reviewPageDTO";
+import MapService from "../services/mapService";
+
+
 
 @injectable()
 class RestaurantService {
   private restaurantRepository: RestaurantRepository;
+  private mapService: MapService;
   private config: Config;
 
   constructor(
@@ -18,9 +22,13 @@ class RestaurantService {
     restaurantRepository: RestaurantRepository,
     @inject(SERVICE_IDENTIFIER.CONFIG)
     config: Config,
+    @inject(SERVICE_IDENTIFIER.MAP_SERVICE)
+    mapService: MapService,
+
   ) {
     this.restaurantRepository = restaurantRepository;
     this.config = config;
+    this.mapService = mapService;
   }
 
   public async getAllRestaurantByRanking() {
@@ -134,6 +142,54 @@ class RestaurantService {
       searchLimitSize,
     );
   }
+
+
+
+
+  public async addRestaurant(restaurantData: Partial<Restaurant>) {
+
+
+    if (!restaurantData.lat || !restaurantData.lon) {
+      // 📌 Google Maps の短縮 URL から緯度・経度を取得
+      const coordinates = await this.mapService.getLatLonAndPlaceNameFromGoogleMapsShortUrl(restaurantData.location!);
+      if (!coordinates) {
+        throw new Error("Failed to fetch coordinates");
+      }
+      restaurantData.lat = coordinates.lat;
+      restaurantData.lon = coordinates.lon;
+      if (!restaurantData.name) {
+        restaurantData.name = coordinates.restaurantName;
+      }
+    }
+
+    // 緯度・経度から city, country を取得
+    if (!restaurantData.city || !restaurantData.country) {
+      const locationData = await this.mapService.getCityAndCountryFromCoordinates(restaurantData.lat!, restaurantData.lon!);
+      restaurantData.city = locationData.city;
+      restaurantData.country = locationData.country;
+    }
+
+    // データのバリデーション
+    if (!restaurantData.name || !restaurantData.location || 
+      restaurantData.lat === undefined || restaurantData.lon === undefined || 
+      !restaurantData.city || !restaurantData.country) {
+      throw new Error("Missing required fields");
+    }
+
+    // レストランをデータベースに保存
+    const newRestaurant = await this.restaurantRepository.createRestaurant(restaurantData);
+
+    // 返却データを DTO 形式に変換
+    return new HomePageDTO(
+      newRestaurant.restaurant_id,
+      newRestaurant.name,
+      "",  // 画像のデフォルト値
+      0,   // 初期の評価
+      newRestaurant.location,
+      `${newRestaurant.city}, ${newRestaurant.country}`
+    );
+  }
 }
 
 export default RestaurantService;
+
