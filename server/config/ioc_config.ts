@@ -14,6 +14,9 @@ import ImageService from "../services/imageService";
 import MapService from "../services/mapService";
 import CategoryController from "../controllers/categoryController";
 import CategoryRepository from "../repositories/categoryRepository";
+import ReviewService from "../services/reviewService";
+import ReviewRepository from "../repositories/reviewRepository";
+import ReviewController from "../controllers/reviewController";
 
 let container = new Container();
 
@@ -62,4 +65,16 @@ container
   .bind<CategoryRepository>(SERVICE_IDENTIFIER.CATEGORY_REPOSITORY)
   .to(CategoryRepository)
   .inSingletonScope();
+container
+    .bind<ReviewService>(SERVICE_IDENTIFIER.REVIEW_SERVICE)
+    .to(ReviewService)
+    .inSingletonScope();
+container
+    .bind<ReviewRepository>(SERVICE_IDENTIFIER.REVIEW_REPOSITORY)
+    .to(ReviewRepository)
+    .inSingletonScope();
+container
+    .bind<ReviewController>(SERVICE_IDENTIFIER.REVIEW_CONTROLLER)
+    .to(ReviewController)
+    .inSingletonScope();
 export default container;

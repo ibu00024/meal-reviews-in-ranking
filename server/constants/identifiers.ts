@@ -11,6 +11,9 @@ const SERVICE_IDENTIFIER = {
   MAP_SERVICE: Symbol.for("MapService"),
   CATEGORY_CONTROLLER: Symbol.for("CategoryController"),
   CATEGORY_REPOSITORY: Symbol.for("CategoryRepository"),
+  REVIEW_SERVICE: Symbol.for("ReviewService"),
+  REVIEW_REPOSITORY: Symbol.for("ReviewRepository"),
+  REVIEW_CONTROLLER: Symbol.for("ReviewController"),
 };
 
 export default SERVICE_IDENTIFIER;
