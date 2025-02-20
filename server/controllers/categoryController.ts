@@ -17,7 +17,6 @@ class CategoryController {
     // クラスのプロパティを設定
     this.categoryRepository = categoryRepository;
 
-
     this.getAllCategories = this.getAllCategories.bind(this);
   }
 
