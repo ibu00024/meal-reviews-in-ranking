@@ -42,6 +42,12 @@ class RestaurantRepository {
       .limit(size)
       .getMany();
   }
+
+  public async createRestaurant(data: Partial<Restaurant>): Promise<Restaurant> {
+    const newRestaurant = this.restaurantRepo.create(data);
+    return this.restaurantRepo.save(newRestaurant);
+  }
+  
 }
 
 export default RestaurantRepository;
