@@ -7,13 +7,14 @@ import Config from "../config/config";
 import { Review } from "../models/review";
 import ReviewDTO from "../models/DTO/reviewDTO";
 import ReviewPageDTO from "../models/DTO/reviewPageDTO";
+import MapService from "../services/mapService";
 
-import axios from "axios"; // HTTPリクエスト用
 
 
 @injectable()
 class RestaurantService {
   private restaurantRepository: RestaurantRepository;
+  private mapService: MapService;
   private config: Config;
 
   constructor(
@@ -21,9 +22,13 @@ class RestaurantService {
     restaurantRepository: RestaurantRepository,
     @inject(SERVICE_IDENTIFIER.CONFIG)
     config: Config,
+    @inject(SERVICE_IDENTIFIER.MAP_SERVICE)
+    mapService: MapService,
+
   ) {
     this.restaurantRepository = restaurantRepository;
     this.config = config;
+    this.mapService = mapService;
   }
 
   public async getAllRestaurantByRanking() {
@@ -139,35 +144,27 @@ class RestaurantService {
   }
 
 
-  // get city and country from lat and lon
-  public async getCityAndCountryFromCoordinates(lat: number, lon: number): Promise<{ city: string, country: string }> {
-    try {
-        const response = await axios.get(`https://nominatim.openstreetmap.org/reverse`, {
-            params: {
-                format: "json",
-                lat: lat,
-                lon: lon,
-                "accept-language": "en" // results in English
-
-            }
-        });
-
-        const address = response.data.address;
-        return {
-            city: address.city || address.town || address.village || "",
-            country: address.country || ""
-        };
-    } catch (error) {
-        console.error("Failed to fetch location data:", error);
-        return { city: "", country: "" }; // 取得できなかった場合
-    }
-  }
 
 
   public async addRestaurant(restaurantData: Partial<Restaurant>) {
+
+
+    if (!restaurantData.lat || !restaurantData.lon) {
+      // 📌 Google Maps の短縮 URL から緯度・経度を取得
+      const coordinates = await this.mapService.getLatLonAndPlaceNameFromGoogleMapsShortUrl(restaurantData.location!);
+      if (!coordinates) {
+        throw new Error("Failed to fetch coordinates");
+      }
+      restaurantData.lat = coordinates.lat;
+      restaurantData.lon = coordinates.lon;
+      if (!restaurantData.name) {
+        restaurantData.name = coordinates.restaurantName;
+      }
+    }
+
     // 緯度・経度から city, country を取得
     if (!restaurantData.city || !restaurantData.country) {
-      const locationData = await this.getCityAndCountryFromCoordinates(restaurantData.lat!, restaurantData.lon!);
+      const locationData = await this.mapService.getCityAndCountryFromCoordinates(restaurantData.lat!, restaurantData.lon!);
       restaurantData.city = locationData.city;
       restaurantData.country = locationData.country;
     }

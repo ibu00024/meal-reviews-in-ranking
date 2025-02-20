@@ -8,6 +8,7 @@ const SERVICE_IDENTIFIER = {
   IMAGE_CONTROLLER: Symbol.for("ImageController"),
   IMAGE_SERVICE: Symbol.for("ImageService"),
   IMAGE_REPOSITORY: Symbol.for("ImageRepository"),
+  MAP_SERVICE: Symbol.for("MapService"),
 };
 
 export default SERVICE_IDENTIFIER;

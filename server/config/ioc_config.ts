@@ -11,6 +11,7 @@ import MinioConnection from "../utils/minioConnection";
 import ImageController from "../controllers/imageController";
 import ImageRepository from "../repositories/imageRepository";
 import ImageService from "../services/imageService";
+import MapService from "../services/mapService";
 
 let container = new Container();
 
@@ -46,5 +47,9 @@ container
 container
   .bind<ImageRepository>(SERVICE_IDENTIFIER.IMAGE_REPOSITORY)
   .to(ImageRepository)
+  .inSingletonScope();
+container
+  .bind<MapService>(SERVICE_IDENTIFIER.MAP_SERVICE)
+  .to(MapService)
   .inSingletonScope();
 export default container;
