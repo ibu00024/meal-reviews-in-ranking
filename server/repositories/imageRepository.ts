@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import {Client, S3Error} from "minio";
+import { Client, S3Error } from "minio";
 import SERVICE_IDENTIFIER from "../constants/identifiers";
 import Config from "../config/config";
 import MinioConnection from "../utils/minioConnection";
@@ -35,10 +35,12 @@ class ImageRepository {
 
   public async isObjectExist(objectName: string): Promise<boolean> {
     try {
-      await this.minioClient.statObject(this.config.minioConfig.MINIO_BUCKET, objectName);
+      await this.minioClient.statObject(
+        this.config.minioConfig.MINIO_BUCKET,
+        objectName,
+      );
       return true;
-    }
-    catch (error: any) {
+    } catch (error: any) {
       if (error.code === "NotFound") {
         console.log("Object does not exist.");
         return false;

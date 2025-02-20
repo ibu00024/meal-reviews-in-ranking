@@ -18,7 +18,7 @@ class ReviewRepository {
 
   public async insertReview(review: Review): Promise<void> {
     const result = await this.reviewRepo.save(review);
-    console.log("Saved Review ID:", "")
+    console.log("Saved Review ID:", "");
   }
 }
 

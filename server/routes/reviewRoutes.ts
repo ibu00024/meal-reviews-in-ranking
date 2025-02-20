@@ -5,7 +5,7 @@ import ReviewController from "../controllers/reviewController";
 
 const reviewRouter = express.Router();
 const reviewController = container.get<ReviewController>(
-    SERVICE_IDENTIFIER.REVIEW_CONTROLLER,
+  SERVICE_IDENTIFIER.REVIEW_CONTROLLER,
 );
 
 reviewRouter.post("/", reviewController.submitReview);

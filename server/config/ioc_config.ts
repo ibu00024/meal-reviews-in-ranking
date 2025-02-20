@@ -66,15 +66,15 @@ container
   .to(CategoryRepository)
   .inSingletonScope();
 container
-    .bind<ReviewService>(SERVICE_IDENTIFIER.REVIEW_SERVICE)
-    .to(ReviewService)
-    .inSingletonScope();
+  .bind<ReviewService>(SERVICE_IDENTIFIER.REVIEW_SERVICE)
+  .to(ReviewService)
+  .inSingletonScope();
 container
-    .bind<ReviewRepository>(SERVICE_IDENTIFIER.REVIEW_REPOSITORY)
-    .to(ReviewRepository)
-    .inSingletonScope();
+  .bind<ReviewRepository>(SERVICE_IDENTIFIER.REVIEW_REPOSITORY)
+  .to(ReviewRepository)
+  .inSingletonScope();
 container
-    .bind<ReviewController>(SERVICE_IDENTIFIER.REVIEW_CONTROLLER)
-    .to(ReviewController)
-    .inSingletonScope();
+  .bind<ReviewController>(SERVICE_IDENTIFIER.REVIEW_CONTROLLER)
+  .to(ReviewController)
+  .inSingletonScope();
 export default container;

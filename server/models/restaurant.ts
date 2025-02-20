@@ -9,7 +9,7 @@ import { Review } from "./review";
 
 @Entity()
 export class Restaurant {
-  @PrimaryGeneratedColumn('increment')
+  @PrimaryGeneratedColumn("increment")
   restaurant_id!: number;
 
   @Index({ fulltext: true })

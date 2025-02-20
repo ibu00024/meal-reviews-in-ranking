@@ -72,7 +72,8 @@ class RestaurantController {
   public async addRestaurant(req: Request, res: Response) {
     try {
       const restaurant = req.body;
-      const newRestaurant = await this.restaurantService.addRestaurant(restaurant);
+      const newRestaurant =
+        await this.restaurantService.addRestaurant(restaurant);
       res.status(200).json({ success: true, data: newRestaurant });
     } catch (error) {
       res.status(500).json({

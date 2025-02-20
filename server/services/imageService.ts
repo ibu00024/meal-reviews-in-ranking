@@ -14,7 +14,7 @@ class ImageService {
     @inject(SERVICE_IDENTIFIER.IMAGE_REPOSITORY)
     imageRepository: ImageRepository,
     @inject(SERVICE_IDENTIFIER.CONFIG)
-    config: Config
+    config: Config,
   ) {
     this.imageRepository = imageRepository;
     this.minioConfig = config.minioConfig;
@@ -37,12 +37,17 @@ class ImageService {
   }
 
   public async isUrlValid(url: string): Promise<boolean> {
-    const extractedPath = this.extractMinioParts(url)
-    const isObjectExist = await this.imageRepository.isObjectExist(extractedPath.object);
-    return extractedPath &&
-        extractedPath.endpoint == this.minioConfig.MINIO_ENDPOINT &&
-        extractedPath.port == this.minioConfig.MINIO_PORT &&
-        extractedPath.bucket == this.minioConfig.MINIO_BUCKET && isObjectExist
+    const extractedPath = this.extractMinioParts(url);
+    const isObjectExist = await this.imageRepository.isObjectExist(
+      extractedPath.object,
+    );
+    return (
+      extractedPath &&
+      extractedPath.endpoint == this.minioConfig.MINIO_ENDPOINT &&
+      extractedPath.port == this.minioConfig.MINIO_PORT &&
+      extractedPath.bucket == this.minioConfig.MINIO_BUCKET &&
+      isObjectExist
+    );
   }
 
   private extractMinioParts(url: string) {
@@ -59,7 +64,7 @@ class ImageService {
       endpoint: endpoint,
       port: Number(port),
       bucket: bucket,
-      object: objectName
+      object: objectName,
     };
   }
 }
