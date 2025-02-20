@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Modal } from "@mui/material";
 import "../formStyles.css";
 import SuccessIcon from "../assets/success-icon.svg";
 import FailIcon from "../assets/fail-icon.svg";
@@ -7,12 +6,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as solidStar, faStarHalfAlt, faStar as regularStar } from "@fortawesome/free-solid-svg-icons";
 
 export const FormDataForm = () => {
+  const [username, setUsername] = useState("");
+  const [restaurantName, setRestaurantName] = useState("");
+  const [menuName, setMenuName] = useState("");
+  const [menuCategory, setMenuCategory] = useState("");
+  const [menuRating, setMenuRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
+  const [menuPrice, setMenuPrice] = useState("");
+  const [comment, setComment] = useState("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isSubmitSuccess, setIsSubmitSuccess] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [menuRating, setMenuRating] = useState(0); // Store selected rating
-  const [hoverRating, setHoverRating] = useState(0); // Store hovered rating
-  const [imageFile, setImageFile] = useState<File | null>(null); // Store single image
-  const [imageUrl, setImageUrl] = useState<string | null>(null); // Store uploaded image URL
+
   
   // Define menu categories as a constant object
   const MENU_CATEGORIES: { [key: number]: string } = {
@@ -25,66 +31,58 @@ export const FormDataForm = () => {
 
   const handleSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    const form = evt.target as HTMLFormElement;
-    const formData = new FormData(form);
+    // Prepare the JSON body with state values
+    const submissionData = {
+      username: username || "Anonymous", // Default to "Anonymous" if empty
+      restaurant_name: restaurantName,
+      menu_name: menuName,
+      menu_category: menuCategory,
+      menu_rating: menuRating,
+      menu_price: menuPrice,
+      comment: comment,
+      image_url: imageUrl, // Ensure an empty string if no image
+    };
 
-    if (!formData.get("username")) {
-      formData.set("username", "Anonymous");
-    }
+    console.log("Submitting Data:", submissionData);
 
-//  Log form data before submitting
-  console.log("Form Data (Before Sending):");
-  for (const [key, value] of formData.entries()) {
-    console.log(`${key}: ${value}`);
-  }
+    try {
+      const response = await fetch("http://localhost:8000/submit", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify(submissionData),
+      });
 
-  try {
-    const response = await fetch("http://localhost:8000/submit", {
-      method: "POST",
-      body: formData,
-    });
+      if (!response.ok) {
+          console.error("Server responded with error status:", response.status);
+          throw new Error(`Submission failed with status ${response.status}`);
+      }
 
-    if (!response.ok) {
-      console.log("Server responded with an error status:", response.status);
-      throw new Error(`Submission failed with status ${response.status}`);
-    }
+      const result = await response.json();
+      console.log("Server Response:", result);
 
-    const result = await response.json();
-    console.log("Server Response:", result);
-
-    // Make sure success state updates before opening modal
-    setIsSubmitSuccess(true);
-    setShowModal(true);
-
-  } catch (error) {
-    console.error("Error submitting form:", error);
-
-    // Ensure fail modal is set correctly
-    setIsSubmitSuccess(false);
-    
-    // Delay showing modal to ensure state updates correctly
-    setTimeout(() => {
+      // SUCCESS: Show modal and reset form
+      setIsSubmitSuccess(true);
       setShowModal(true);
-      console.log("Modal State (after update):", showModal, "Submission Success:", isSubmitSuccess);
-    }, 50);
-  }
 
-  // Convert menu category key from string to number
-  const categoryKey = formData.get("menu_category") as string;
-  if (categoryKey) {
-    formData.set("menu_category", parseInt(categoryKey, 10).toString());
-  }
+      // Reset form fields only on successful submission
+      setUsername("");
+      setRestaurantName("");
+      setMenuName("");
+      setMenuCategory("");
+      setMenuRating(0);
+      setMenuPrice("");
+      setComment("");
+      setImageFile(null);
+      setImageUrl(null);
+    } catch (error) {
+      console.error("Error submitting form:", error);
 
-
-    formData.set("menu_rating", menuRating.toString()); // Store as number
-    if (imageUrl) formData.set("image", imageUrl); // Store image URL
-
-    const data = Object.fromEntries(formData);
-    console.log("Final Form Data:", data);
-
-    form.reset();
-    setImageFile(null);
-    setImageUrl(null);
+      // FAILURE: Show modal but DO NOT reset the form
+      setIsSubmitSuccess(false);
+      setShowModal(true);
+    }
   };
 
 
@@ -106,14 +104,6 @@ export const FormDataForm = () => {
     setHoverRating(isHalf ? star - 0.5 : star);
   };
 
-  /** Handle image selection */
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0] || null;
-    if (!file) return;
-
-    setImageFile(file);
-  };
-
   /** Upload the image to the server */
   const handleUploadImage = async () => {
     if (!imageFile) {
@@ -129,14 +119,20 @@ export const FormDataForm = () => {
         method: "POST",
         body: formData,
       });
-
-      if (!response.ok) throw new Error("Upload failed");
-
+      
       const result = await response.json();
-      setImageUrl(result.url); // Store uploaded image URL
+      console.log("Image Upload Response:", result);
+      
+      if (result.success && result.url) {
+        setImageUrl(result.url);
+      } else {
+        alert("Image upload failed. Please try again.");
+        setImageUrl(null);
+      }
     } catch (error) {
       console.error("Upload error:", error);
       alert("Failed to upload the image.");
+      setImageUrl(null);
     }
   };
 
@@ -152,8 +148,10 @@ export const FormDataForm = () => {
             type="text"
             id="username"
             name="username"
+            value={username}
             className="form__input"
             placeholder="Anonymous"
+            onChange={(e) => setUsername(e.target.value)}
           />
         </div>
 
@@ -166,6 +164,8 @@ export const FormDataForm = () => {
             id="restaurant_name"
             name="restaurant_name"
             className="form__input"
+            value={restaurantName}
+            onChange={(e) => setRestaurantName(e.target.value)}
             // required
           />
         </div>
@@ -179,6 +179,8 @@ export const FormDataForm = () => {
             id="menu_name"
             name="menu_name"
             className="form__input"
+            value={menuName}
+            onChange={(e) => setMenuName(e.target.value)}
             // required
           />
         </div>
@@ -187,7 +189,13 @@ export const FormDataForm = () => {
           <label htmlFor="menu_category" className="form__label">
             Menu Category
           </label>
-          <select id="menu_category" name="menu_category" className="form__input">
+          <select 
+            id="menu_category" 
+            name="menu_category" 
+            className="form__input"
+            value={menuCategory}
+            onChange={(e) => setMenuCategory(e.target.value)}
+            >
             <option value="">Select a category</option>
             {Object.entries(MENU_CATEGORIES).map(([key, value]) => (
                 <option key={key} value={key}>{value}</option>
@@ -221,7 +229,7 @@ export const FormDataForm = () => {
               );
             })}
           </div>
-          <input type="hidden" name="menu_rating" value={menuRating} />
+          <input type="hidden" name="menu_rating" value={menuRating}/>
         </div>
 
         <div className="form__group">
@@ -234,6 +242,8 @@ export const FormDataForm = () => {
             name="menu_price"
             className="form__input"
             step="0.01"
+            value={menuPrice}
+            onChange={(e) => setMenuPrice(e.target.value)}
             // required
           />
         </div>
@@ -246,6 +256,8 @@ export const FormDataForm = () => {
             name="comment"
             id="comment"
             className="form__textarea"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
             // required
           ></textarea>
         </div>
@@ -253,11 +265,20 @@ export const FormDataForm = () => {
         {/* Single Image Upload */}
         <div className="form__group">
           <label htmlFor="image_upload" className="form__label">Upload an Image</label>
-          <input type="file" id="image_upload" name="image" className="form__input" accept="image/*" onChange={handleImageChange} />
-          {imageFile && (
+          <input 
+            type="file" 
+            id="image_upload" 
+            name="image" 
+            className="form__input" 
+            accept="image/*" 
+            onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+            />
+          {imageUrl ? (
             <div className="image-preview">
-              <img src={URL.createObjectURL(imageFile)} alt="Preview" className="preview-img" />
+                <img src={imageUrl} alt="Uploaded Preview" className="preview-img" />
             </div>
+          ) : (
+              <p className="upload-status">No image uploaded yet.</p>
           )}
           <button type="button" className="button" onClick={handleUploadImage}>Upload</button>
         </div>
