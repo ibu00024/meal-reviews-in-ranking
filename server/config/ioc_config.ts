@@ -12,6 +12,8 @@ import ImageController from "../controllers/imageController";
 import ImageRepository from "../repositories/imageRepository";
 import ImageService from "../services/imageService";
 import MapService from "../services/mapService";
+import CategoryController from "../controllers/categoryController";
+import CategoryRepository from "../repositories/categoryRepository";
 
 let container = new Container();
 
@@ -51,5 +53,13 @@ container
 container
   .bind<MapService>(SERVICE_IDENTIFIER.MAP_SERVICE)
   .to(MapService)
+  .inSingletonScope();
+container
+  .bind<CategoryController>(SERVICE_IDENTIFIER.CATEGORY_CONTROLLER)
+  .to(CategoryController)
+  .inSingletonScope();
+container
+  .bind<CategoryRepository>(SERVICE_IDENTIFIER.CATEGORY_REPOSITORY)
+  .to(CategoryRepository)
   .inSingletonScope();
 export default container;
