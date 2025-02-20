@@ -12,7 +12,7 @@ interface Restaurant {
 
 // Production: fetch data from the API
 const fetchRestaurants = async (): Promise<Restaurant[]> => {
-    const response = await fetch("/api/restaurants"); // TODO: replace with actual API endpoint
+    const response = await fetch("http://localhost:8000/restaurant/1"); // TODO: replace with actual API endpoint
     if (!response.ok) {
         throw new Error("Failed to fetch data");
     }
