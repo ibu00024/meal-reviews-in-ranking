@@ -8,6 +8,9 @@ import { Review } from "../models/review";
 import ReviewDTO from "../models/DTO/reviewDTO";
 import ReviewPageDTO from "../models/DTO/reviewPageDTO";
 
+import axios from "axios"; // HTTPリクエスト用
+
+
 @injectable()
 class RestaurantService {
   private restaurantRepository: RestaurantRepository;
@@ -134,6 +137,62 @@ class RestaurantService {
       searchLimitSize,
     );
   }
+
+
+  // get city and country from lat and lon
+  public async getCityAndCountryFromCoordinates(lat: number, lon: number): Promise<{ city: string, country: string }> {
+    try {
+        const response = await axios.get(`https://nominatim.openstreetmap.org/reverse`, {
+            params: {
+                format: "json",
+                lat: lat,
+                lon: lon,
+                "accept-language": "en" // results in English
+
+            }
+        });
+
+        const address = response.data.address;
+        return {
+            city: address.city || address.town || address.village || "",
+            country: address.country || ""
+        };
+    } catch (error) {
+        console.error("Failed to fetch location data:", error);
+        return { city: "", country: "" }; // 取得できなかった場合
+    }
+  }
+
+
+  public async addRestaurant(restaurantData: Partial<Restaurant>) {
+    // 緯度・経度から city, country を取得
+    if (!restaurantData.city || !restaurantData.country) {
+      const locationData = await this.getCityAndCountryFromCoordinates(restaurantData.lat!, restaurantData.lon!);
+      restaurantData.city = locationData.city;
+      restaurantData.country = locationData.country;
+    }
+
+    // データのバリデーション
+    if (!restaurantData.name || !restaurantData.location || 
+      restaurantData.lat === undefined || restaurantData.lon === undefined || 
+      !restaurantData.city || !restaurantData.country) {
+      throw new Error("Missing required fields");
+    }
+
+    // レストランをデータベースに保存
+    const newRestaurant = await this.restaurantRepository.createRestaurant(restaurantData);
+
+    // 返却データを DTO 形式に変換
+    return new HomePageDTO(
+      newRestaurant.restaurant_id,
+      newRestaurant.name,
+      "",  // 画像のデフォルト値
+      0,   // 初期の評価
+      newRestaurant.location,
+      `${newRestaurant.city}, ${newRestaurant.country}`
+    );
+  }
 }
 
 export default RestaurantService;
+

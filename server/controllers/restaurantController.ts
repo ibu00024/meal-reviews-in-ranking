@@ -16,6 +16,7 @@ class RestaurantController {
     this.getAllRestaurants = this.getAllRestaurants.bind(this);
     this.searchRestaurant = this.searchRestaurant.bind(this);
     this.getRestaurantById = this.getRestaurantById.bind(this);
+    this.addRestaurant = this.addRestaurant.bind(this);
   }
 
   public async getAllRestaurants(req: Request, res: Response) {
@@ -61,6 +62,20 @@ class RestaurantController {
       res.status(200).json({ success: true, data: searchResult });
     } catch (error) {
       res.status(500).json({
+        success: false,
+        message: "Internal Server Error",
+        error: (error as Error).message,
+      });
+    }
+  }
+
+  public async addRestaurant(req: Request, res: Response) {
+    try {
+      const restaurant = req.body;  // Requestからrestaurant情報を取得
+      const newRestaurant = await this.restaurantService.addRestaurant(restaurant);
+      res.status(200).json({ success: true, data: newRestaurant });
+    } catch (error) {
+      res.status(600).json({
         success: false,
         message: "Internal Server Error",
         error: (error as Error).message,
