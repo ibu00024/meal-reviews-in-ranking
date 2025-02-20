@@ -75,7 +75,7 @@ class RestaurantController {
       const newRestaurant = await this.restaurantService.addRestaurant(restaurant);
       res.status(200).json({ success: true, data: newRestaurant });
     } catch (error) {
-      res.status(600).json({
+      res.status(500).json({
         success: false,
         message: "Internal Server Error",
         error: (error as Error).message,
