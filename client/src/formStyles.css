@@ -130,23 +130,41 @@ body {
   border: 1px solid #666;
 }
 
-
-/* Submit Button */
-.button {
-  background-color: #007bff;
+.search-button,
+.upload-button {
+  background-color: #17a2b8; /* Teal */
   color: white;
   font-size: 16px;
   padding: 10px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  width: 100%;
   transition: 0.3s ease-in-out;
-  box-sizing: border-box;
 }
 
-.button:hover {
-  background-color: #0056b3;
+.search-button:hover,
+.upload-button:hover {
+  background-color: #117a8b; /* Darker Teal */
+}
+
+/* Submit Button */
+.submit-button {
+  background-color: #007bff;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  transition: 0.3s ease-in-out;
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3); /* Glow effect */
+}
+
+.submit-button:hover {
+  background-color: #0056b3; /* Darker Blue */
+  box-shadow: 0 6px 15px rgba(0, 123, 255, 0.5); /* Stronger glow */
 }
 
 /* Dark Mode Modal Container */

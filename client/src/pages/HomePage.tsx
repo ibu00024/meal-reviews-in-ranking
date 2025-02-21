@@ -4,6 +4,7 @@ import "../index.css";
 import RestaurantCard from "../components/RestaurantCard";
 import SearchBar from "../components/SearchBar";
 import AddReviewButton from "../components/AddReviewButton";
+import Logo from "../assets/logo.png";
 
 interface Restaurant {
     name: string;
@@ -71,8 +72,9 @@ const HomePage = () => {
     return (
         <div className="page-container">
             <div className="search-bar-container">
+                <img src={Logo} alt="Meal Review Logo" className="logo" />
                 <SearchBar onSearch={setSearchQuery} />
-                <AddReviewButton onClick={() => navigate("/review")} />
+                <AddReviewButton onClick={() => navigate("/submit")} />
             </div>
             {loading ? (
                 <p>Loading...</p>
