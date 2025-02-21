@@ -13,17 +13,23 @@ interface ReviewCardProps {
 
 const ReviewCard: React.FC<ReviewCardProps> = ({ menuName, reviewerName, rating, price, comments, photoURL, category }) => {
     return (
-        <div className="card">
-            <h3 className="card-title">{menuName}</h3>
-            <h4>{category}</h4>
-            <div className="card-rating">
-                <StarRating rating={rating} />
-                <span className="rating-text">{rating}</span>
-            </div>
-            <p>{comments}</p>
-            <p>Price: {price}</p>
-            {reviewerName.length > 0 && <p>From: {reviewerName}</p>}
+        <div className="card-container">
             {photoURL && <img className="review-image" src={photoURL} alt={menuName} />}
+            <div className="review-info">
+                <div className="review-card-header">
+                    <div className="review-card-name">{menuName}</div>
+                    <div className="restaurant-page-category-item">{category}</div>
+                    <div className="restaurant-page-price">Ұ {price}</div>
+                </div>
+
+                <div className="review-card-star">
+                    <StarRating rating={rating} />
+                    <span className="review-card-dot">•</span>
+                    <span className="review-card-star-number">{rating}</span>
+                </div>
+                <div className="review-comment">{comments}</div>
+                {reviewerName.length > 0 && <div className="reviewer-name">From: {reviewerName}</div>}
+            </div>
         </div>
     );
 };
