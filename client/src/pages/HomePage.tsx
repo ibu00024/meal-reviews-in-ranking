@@ -4,31 +4,30 @@ import RestaurantCard from "../components/RestaurantCard";
 import SearchBar from "../components/SearchBar";
 
 interface Restaurant {
-    name: string;
-    location: string;
-    imageUrl: string;
-    rating: number;
+    restaurantName: string;
+    coverImage: string;
+    averageRating: number;
+    googleMapUrl: string;
+    restaurantLocation: string;
+}
+
+// for the API
+interface ApiResponse {
+    success: boolean;
+    data: Restaurant[];
 }
 
 // Production: fetch data from the API
-const fetchRestaurants = async (): Promise<Restaurant[]> => {
-    const response = await fetch("http://localhost:8000/restaurant/1"); // TODO: replace with actual API endpoint
+const fetchRestaurants = async (): Promise<ApiResponse> => {
+    const response = await fetch("http://localhost:8000/restaurant/");
     if (!response.ok) {
         throw new Error("Failed to fetch data");
     }
     return response.json();
 };
 
-// Development: use mock data
-const mockRestaurants: Restaurant[] = [
-    { name: "Restaurant A", location: "Nara", imageUrl: "", rating: 3 },
-    { name: "Restaurant B", location: "Tokyo", imageUrl: "", rating: 4 },
-    { name: "Restaurant C", location: "Tokyo", imageUrl: "", rating: 3.4 },
-    { name: "Restaurant D", location: "Osaka", imageUrl: "", rating: 4.1 },
-    { name: "Restaurant E", location: "Osaka", imageUrl: "", rating: 4.3 },
-    { name: "Restaurant F", location: "Osaka", imageUrl: "", rating: 1.5 },
-    { name: "Restaurant G", location: "Osaka", imageUrl: "", rating: 2.2 },
-];
+const apiResult: ApiResponse = await fetchRestaurants();
+const apiRestaurants: Restaurant[] = apiResult.data;
 
 const HomePage = () => {
     const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
@@ -42,10 +41,11 @@ const HomePage = () => {
                 let data: Restaurant[];
                 if (import.meta.env.PROD) {
                     // Fetch data from the API in production
-                    data = await fetchRestaurants();
+                    let apiResponse = await fetchRestaurants();
+                    data = apiResponse.data
                 } else {
                     // Use mock data in development
-                    data = mockRestaurants;
+                    data = apiRestaurants;
                 }
                 setRestaurants(data);
             } catch (err) {
@@ -62,7 +62,7 @@ const HomePage = () => {
         searchQuery.trim() === ""
             ? restaurants
             : restaurants.filter((restaurant) =>
-                restaurant.name.toLowerCase().includes(searchQuery.toLowerCase())
+                restaurant.restaurantName.toLowerCase().includes(searchQuery.toLowerCase())
             );
 
     return (
