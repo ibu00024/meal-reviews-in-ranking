@@ -23,9 +23,8 @@ app.use(cors({
     allowedHeaders: ["Content-Type"],
   }));
 
-  app.use(express.json());
+app.use(express.json());
 
-const cors = require('cors');
 app.use(cors());
 
 // Register routes
