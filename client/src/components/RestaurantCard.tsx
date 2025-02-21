@@ -2,10 +2,11 @@ import React from "react";
 import StarRating from "./StarRating";
 
 export interface Restaurant {
-    name: string;
-    location: string;
-    imageUrl: string;
-    rating: number;
+    restaurantName: string;
+    coverImage: string;
+    averageRating: number;
+    googleMapUrl: string;
+    restaurantLocation: string;
 }
 
 interface RestaurantCardProps {
@@ -16,13 +17,13 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant }) => {
     return (
         <div className="card">
             <div className="card-image">
-                <img src={restaurant.imageUrl} alt={restaurant.name} />
+                <img src={restaurant.coverImage} alt={restaurant.restaurantName} />
             </div>
-            <h2 className="card-title">{restaurant.name}</h2>
-            <p className="card-location">{restaurant.location}</p>
+            <h2 className="card-title">{restaurant.restaurantName}</h2>
+            <p className="card-location">{restaurant.restaurantLocation}</p>
             <div className="card-rating">
-                <span className="rating-text">{restaurant.rating.toFixed(1)}/5</span>
-                <StarRating rating={restaurant.rating} />
+                <span className="rating-text">{restaurant.averageRating.toFixed(1)}/5</span>
+                <StarRating rating={restaurant.averageRating} />
             </div>
         </div>
     );
