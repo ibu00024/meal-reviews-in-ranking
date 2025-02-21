@@ -8,6 +8,7 @@ import restaurantRoutes from "./routes/restaurantRoutes.js";
 import MinioConnection from "./utils/minioConnection";
 import imageRoutes from "./routes/imageRoutes";
 import categoryRoutes from "./routes/categoryRoutes.js";
+import reviewRouter from "./routes/reviewRoutes";
 
 let config = container.get<Config>(SERVICE_IDENTIFIER.CONFIG);
 
@@ -18,8 +19,10 @@ app.use(express.json());
 app.use("/restaurant", restaurantRoutes);
 app.use("/image", imageRoutes);
 app.use("/category", categoryRoutes);
+app.use("/review", reviewRouter);
 
 container.get<MinioConnection>(SERVICE_IDENTIFIER.MINIO_CONNECTION);
 
-const PORT = config.serverConfig.PORT || 5500;
+const PORT = config.serverConfig.PORT || 8000;
+
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

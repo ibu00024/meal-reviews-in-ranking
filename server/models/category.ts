@@ -3,7 +3,7 @@ import { Review } from "./review";
 
 @Entity()
 export class Category {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn("increment")
   category_id!: number;
 
   @Column({ type: "varchar", length: 255 })

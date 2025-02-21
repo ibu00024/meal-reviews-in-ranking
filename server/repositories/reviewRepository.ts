@@ -15,6 +15,11 @@ class ReviewRepository {
     const connection = mysqlConnection.getConnection();
     this.reviewRepo = connection.getRepository(Review);
   }
+
+  public async insertReview(review: Review): Promise<void> {
+    const result = await this.reviewRepo.save(review);
+    console.log("Saved Review ID:", "");
+  }
 }
 
 export default ReviewRepository;

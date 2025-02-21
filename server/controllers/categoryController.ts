@@ -1,18 +1,18 @@
 import { inject, injectable } from "inversify";
-import SERVICE_IDENTIFIER from "../constants/identifiers.js";   // 
+import SERVICE_IDENTIFIER from "../constants/identifiers.js"; //
 import { Request, Response } from "express";
 import CategoryRepository from "../repositories/categoryRepository";
 import { Category } from "../models/category";
 import Config from "../config/config";
 
-@injectable()                 // シングルトンのようなもの，DIコンテナで管理する
+@injectable() // シングルトンのようなもの，DIコンテナで管理する
 class CategoryController {
-	private categoryRepository: CategoryRepository;
+  private categoryRepository: CategoryRepository;
 
-  constructor(                
+  constructor(
     // データを取得する
     @inject(SERVICE_IDENTIFIER.CATEGORY_REPOSITORY)
-		categoryRepository: CategoryRepository,
+    categoryRepository: CategoryRepository,
   ) {
     // クラスのプロパティを設定
     this.categoryRepository = categoryRepository;
@@ -22,8 +22,7 @@ class CategoryController {
 
   public async getAllCategories(req: Request, res: Response) {
     try {
-      const categories =
-        await this.categoryRepository.getAllCategories();
+      const categories = await this.categoryRepository.getAllCategories();
       res.status(200).json({ success: true, data: categories });
     } catch (error) {
       res.status(500).json({
@@ -35,4 +34,4 @@ class CategoryController {
   }
 }
 
-export default CategoryController;  // 他のファイルでimportできるようにする
+export default CategoryController; // 他のファイルでimportできるようにする

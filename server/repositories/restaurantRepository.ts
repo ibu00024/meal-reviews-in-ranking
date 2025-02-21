@@ -43,11 +43,19 @@ class RestaurantRepository {
       .getMany();
   }
 
-  public async createRestaurant(data: Partial<Restaurant>): Promise<Restaurant> {
+  public async createRestaurant(
+    data: Partial<Restaurant>,
+  ): Promise<Restaurant> {
     const newRestaurant = this.restaurantRepo.create(data);
     return this.restaurantRepo.save(newRestaurant);
   }
-  
+
+  public async isRestaurantExist(restaurantId: number): Promise<Boolean> {
+    const count = await this.restaurantRepo.count({
+      where: { restaurant_id: restaurantId },
+    });
+    return count > 0;
+  }
 }
 
 export default RestaurantRepository;
