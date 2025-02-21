@@ -1,30 +1,29 @@
 import React from "react";
 import StarRating from "./StarRating";
 
-export interface Review {
-    restaurant: string;
-    menuName: string;
-    menuRating: number;
-    price: number;
-    comment: string;
-    picture: string; // URL to the image
-}
-
 interface ReviewCardProps {
-    review: Review;
+    menuName: string;
+    reviewerName: string;
+    rating: number;
+    price: number;
+    comments: string;
+    photoURL: string;
+    category: string;
 }
 
-const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
+const ReviewCard: React.FC<ReviewCardProps> = ({ menuName, reviewerName, rating, price, comments, photoURL, category }) => {
     return (
         <div className="card">
-            <h3 className="card-title">{review.menuName}</h3>
+            <h3 className="card-title">{menuName}</h3>
+            <h4>{category}</h4>
             <div className="card-rating">
-                <StarRating rating={review.menuRating} />
-                <span className="rating-text">{review.menuRating}</span>
+                <StarRating rating={rating} />
+                <span className="rating-text">{rating}</span>
             </div>
-            <p>{review.comment}</p>
-            <p>Price: {review.price}</p>
-            {review.picture && <img src={review.picture} alt={review.menuName} />}
+            <p>{comments}</p>
+            <p>Price: {price}</p>
+            {reviewerName.length > 0 && <p>From: {reviewerName}</p>}
+            {photoURL && <img className="review-image" src={photoURL} alt={menuName} />}
         </div>
     );
 };
