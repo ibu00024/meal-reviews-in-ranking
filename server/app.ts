@@ -24,4 +24,5 @@ app.use("/review", reviewRouter);
 container.get<MinioConnection>(SERVICE_IDENTIFIER.MINIO_CONNECTION);
 
 const PORT = config.serverConfig.PORT || 8000;
+
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
