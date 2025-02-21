@@ -56,6 +56,7 @@ class RestaurantService {
         review.price,
         review.comment,
         review.picture_url,
+        review.category.name,
       );
     });
   }

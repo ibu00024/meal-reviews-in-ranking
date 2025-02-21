@@ -8,6 +8,7 @@ import ReviewSubmitDTO from "../models/DTO/reviewSubmitDTO";
 import { Review } from "../models/review";
 import { Restaurant } from "../models/restaurant";
 import { Category } from "../models/category";
+import ReviewDTO from "../models/DTO/reviewDTO";
 
 @injectable()
 class ReviewService {
@@ -30,6 +31,25 @@ class ReviewService {
     this.imageService = imageService;
     this.restaurantRepository = restaurantRepository;
     this.categoryRepository = categoryRepository;
+  }
+
+  public async getReviewByRestaurantId(id: number) {
+    const reviews = await this.reviewRepository.getReviewById(id);
+    if (reviews.length === 0) {
+      throw Error(`Review with restaurant id ${id} not found`);
+    }
+    return reviews.map((review) => {
+      return new ReviewDTO(
+        review.review_id,
+        review.name,
+        review.reviewer_name,
+        review.rating,
+        review.price,
+        review.comment,
+        review.picture_url,
+        review.category.name,
+      );
+    });
   }
 
   public async submitReview(review: ReviewSubmitDTO): Promise<void> {
