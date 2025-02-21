@@ -4,6 +4,9 @@ import ReviewCard from "../components/ReviewCard";
 import {useParams} from "react-router-dom";
 import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
+import {MapContainer, Marker, Popup, TileLayer} from "react-leaflet";
+
+import "leaflet/dist/leaflet.css"
 
 interface Restaurant {
     restaurantId: number;
@@ -91,6 +94,8 @@ const RestaurantPage: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [categories, setCategories] = useState<string[]>([]);
+    const [googleMapUrl, setGoogleMapUrl] = useState<string>("");
+    const [coordinates, setCoordinates] = useState<number[]>([0, 0]);
 
     const convertToImageObject = (images: string[]) => {
         return images.map((image) => {
@@ -129,6 +134,8 @@ const RestaurantPage: React.FC = () => {
                 setReviewImage(restaurantData.reviewImages)
                 setReviews(reviewsData);
                 setCategories(getCategories(reviewsData))
+                setCoordinates([restaurantData.latitude, restaurantData.longitude])
+                setGoogleMapUrl(restaurantData.googleMapUrl)
             } catch (err) {
                 setError("An error occurred. Please try again later.");
             } finally {
@@ -184,7 +191,32 @@ const RestaurantPage: React.FC = () => {
                     </div>
                     <div className="restaurant-page-main-section">
                         <div className="restaurant-page-map-section">
-
+                            <div className="restaurant-page-map-container">
+                                <h3 className="restaurant-page-map-header">Map</h3>
+                                <MapContainer
+                                    center={[coordinates[0], coordinates[1]]}
+                                    zoom={16}
+                                    style={{ height: "300px", width: "300px", borderRadius: "10px" }}
+                                    scrollWheelZoom={false} // Disable zooming
+                                    dragging={false} // Disable dragging for a static effect
+                                    doubleClickZoom={false} // Disable double-click zoom
+                                    touchZoom={false} // Disable touch zooming
+                                    zoomControl={false} // Hide zoom control
+                                >
+                                    <TileLayer
+                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                        // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                    />
+                                    <Marker position={[coordinates[0], coordinates[1]]}>
+                                        <Popup>Restaurant</Popup>
+                                    </Marker>
+                                </MapContainer>
+                                <a href={googleMapUrl} target="_blank" rel="noopener noreferrer">
+                                    <button className="google-map-button">
+                                        Open in Google Maps
+                                    </button>
+                                </a>
+                            </div>
                         </div>
                         <div className="restaurant-page-review-section">
                             <h2 className="restaurant-page-review-header">Reviews</h2>
