@@ -1,11 +1,19 @@
 // import React from "react";
 import { FormDataForm } from "./pages/ReviewPage";
-// import RestaurantPage from "./pages/RestaurantPage.tsx";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import HomePage from "./pages/HomePage.tsx";
+import RestaurantPage from "./pages/RestaurantPage.tsx";
 
 const App = () => {
-  //return <HomePage />;
-  return <FormDataForm />
-  // return <RestaurantPage />;
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route index element={<HomePage />} />
+        <Route path="submit" element={<FormDataForm />} />
+        <Route path="restaurant" element={<RestaurantPage />} />
+      </Routes>
+    </BrowserRouter>
+  )
 };
 
 export default App;
