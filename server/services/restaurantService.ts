@@ -5,7 +5,6 @@ import { Restaurant } from "../models/restaurant";
 import HomePageDTO from "../models/DTO/homePageDTO";
 import Config from "../config/config";
 import { Review } from "../models/review";
-import ReviewDTO from "../models/DTO/reviewDTO";
 import ReviewPageDTO from "../models/DTO/reviewPageDTO";
 import MapService from "../services/mapService";
 
@@ -46,26 +45,20 @@ class RestaurantService {
     return this.getReviewPageDTO(restaurantWithReview);
   }
 
-  private getReviewsDTO(reviews: Review[]) {
-    return reviews.map((review) => {
-      return new ReviewDTO(
-        review.review_id,
-        review.name,
-        review.reviewer_name,
-        review.rating,
-        review.price,
-        review.comment,
-        review.picture_url,
-        review.category?.name ?? "",
-      );
-    });
+  private getReviewImages(reviews: Review[]) {
+    return reviews
+      .sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
+      .slice(0, 10)
+      .map((review) => {
+        return review.picture_url;
+      });
   }
 
   private getReviewPageDTO(restaurant: Restaurant) {
     const coverImage = this.getCoverImageUrl(restaurant);
     const averageRating = this.calculateAverageReview(restaurant);
     const restaurantAddress = this.getRestaurantAddress(restaurant);
-    const reviewDTO = this.getReviewsDTO(restaurant.reviews);
+    const reviewImages = this.getReviewImages(restaurant.reviews);
     return new ReviewPageDTO(
       restaurant.restaurant_id,
       restaurant.name,
@@ -75,7 +68,7 @@ class RestaurantService {
       restaurantAddress,
       restaurant.lat,
       restaurant.lon,
-      reviewDTO,
+      reviewImages,
     );
   }
 
