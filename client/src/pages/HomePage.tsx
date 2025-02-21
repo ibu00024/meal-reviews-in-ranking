@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../index.css";
 import RestaurantCard from "../components/RestaurantCard";
 import SearchBar from "../components/SearchBar";
+import AddReviewButton from "../components/AddReviewButton";
 
 interface Restaurant {
     name: string;
@@ -31,6 +33,7 @@ const mockRestaurants: Restaurant[] = [
 ];
 
 const HomePage = () => {
+    const navigate = useNavigate();
     const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -69,6 +72,7 @@ const HomePage = () => {
         <div className="page-container">
             <div className="search-bar-container">
                 <SearchBar onSearch={setSearchQuery} />
+                <AddReviewButton onClick={() => navigate("/review")} />
             </div>
             {loading ? (
                 <p>Loading...</p>
