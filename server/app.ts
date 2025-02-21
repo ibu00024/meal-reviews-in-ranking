@@ -4,6 +4,7 @@ import container from "./config/ioc_config";
 import SERVICE_IDENTIFIER from "./constants/identifiers";
 import Config from "./config/config";
 import express from "express";
+import cors from "cors";
 import restaurantRoutes from "./routes/restaurantRoutes.js";
 import MinioConnection from "./utils/minioConnection";
 import imageRoutes from "./routes/imageRoutes";
@@ -12,8 +13,17 @@ import reviewRouter from "./routes/reviewRoutes";
 
 let config = container.get<Config>(SERVICE_IDENTIFIER.CONFIG);
 
+
 const app = express();
-app.use(express.json());
+
+// Enable CORS Middleware
+app.use(cors({
+    origin: "http://localhost:5173", // Allow requests from React frontend
+    methods: ["POST", "GET", "OPTIONS"],
+    allowedHeaders: ["Content-Type"],
+  }));
+
+  app.use(express.json());
 
 // Register routes
 app.use("/restaurant", restaurantRoutes);
