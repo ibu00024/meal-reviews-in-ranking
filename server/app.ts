@@ -15,6 +15,9 @@ let config = container.get<Config>(SERVICE_IDENTIFIER.CONFIG);
 const app = express();
 app.use(express.json());
 
+const cors = require('cors');
+app.use(cors());
+
 // Register routes
 app.use("/restaurant", restaurantRoutes);
 app.use("/image", imageRoutes);
