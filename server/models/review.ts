@@ -4,8 +4,8 @@ import { Category } from "./category";
 
 @Entity()
 export class Review {
-  @PrimaryGeneratedColumn()
-  review_id!: number;
+  @PrimaryGeneratedColumn("increment")
+  review_id?: number;
 
   @Column({ type: "varchar", length: 255 })
   name!: string;
@@ -13,7 +13,7 @@ export class Review {
   @Column({ type: "varchar", length: 255 })
   reviewer_name!: string;
 
-  @Column({ type: "int" })
+  @Column({ type: "float" })
   rating!: number;
 
   @Column({ type: "int" })

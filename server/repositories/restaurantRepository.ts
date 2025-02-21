@@ -22,6 +22,13 @@ class RestaurantRepository {
     });
   }
 
+  public async getRestaurant(restaurantId: number): Promise<Restaurant | null> {
+    return this.restaurantRepo.findOne({
+      relations: ["reviews"],
+      where: [{ restaurant_id: restaurantId }],
+    });
+  }
+
   public async searchRestaurants(
     keyword: string,
     size: number,
@@ -34,6 +41,20 @@ class RestaurantRepository {
       )
       .limit(size)
       .getMany();
+  }
+
+  public async createRestaurant(
+    data: Partial<Restaurant>,
+  ): Promise<Restaurant> {
+    const newRestaurant = this.restaurantRepo.create(data);
+    return this.restaurantRepo.save(newRestaurant);
+  }
+
+  public async isRestaurantExist(restaurantId: number): Promise<Boolean> {
+    const count = await this.restaurantRepo.count({
+      where: { restaurant_id: restaurantId },
+    });
+    return count > 0;
   }
 }
 

@@ -12,8 +12,8 @@ export class InitializeData1738913552906 implements MigrationInterface {
     await queryRunner.query(`
             INSERT INTO restaurant
             VALUES
-                (1, 'Ramen Olympus', 'https://maps.app.goo.gl/PXQAhE5Dy52RJjvg6'),
-                (2, 'Soba Olympus', 'https://maps.app.goo.gl/XuZNY9tpEgu1pzyLA');
+                (1, 'Ramen Olympus', 'https://maps.app.goo.gl/PXQAhE5Dy52RJjvg6', 40.7128, 74.0060, 'New york', 'United State of America'),
+                (2, 'Soba Olympus', 'https://maps.app.goo.gl/XuZNY9tpEgu1pzyLA', 35.6764, 139.6500, 'Tokyo', 'Japan');
         `);
 
     await queryRunner.query(`
