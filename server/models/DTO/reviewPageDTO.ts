@@ -9,7 +9,7 @@ class ReviewPageDTO {
   restaurantLocation: string | undefined;
   latitude: number | undefined;
   longitude: number | undefined;
-  reviews: ReviewDTO[];
+  reviewImages: string[];
 
   constructor(
     restaurantId: number | undefined,
@@ -20,7 +20,7 @@ class ReviewPageDTO {
     restaurantLocation: string | undefined,
     latitude: number | undefined,
     longitude: number | undefined,
-    reviews: ReviewDTO[],
+    reviewImages: string[],
   ) {
     this.restaurantId = restaurantId;
     this.restaurantName = restaurantName;
@@ -30,7 +30,7 @@ class ReviewPageDTO {
     this.restaurantLocation = restaurantLocation;
     this.latitude = latitude;
     this.longitude = longitude;
-    this.reviews = reviews;
+    this.reviewImages = reviewImages;
   }
 }
 

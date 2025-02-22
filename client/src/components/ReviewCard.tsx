@@ -1,30 +1,35 @@
 import React from "react";
 import StarRating from "./StarRating";
 
-export interface Review {
-    restaurant: string;
-    menuName: string;
-    menuRating: number;
-    price: number;
-    comment: string;
-    picture: string; // URL to the image
-}
-
 interface ReviewCardProps {
-    review: Review;
+    menuName: string;
+    reviewerName: string;
+    rating: number;
+    price: number;
+    comments: string;
+    photoURL: string;
+    category: string;
 }
 
-const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
+const ReviewCard: React.FC<ReviewCardProps> = ({ menuName, reviewerName, rating, price, comments, photoURL, category }) => {
     return (
-        <div className="card">
-            <h3 className="card-title">{review.menuName}</h3>
-            <div className="card-rating">
-                <StarRating rating={review.menuRating} />
-                <span className="rating-text">{review.menuRating}</span>
+        <div className="card-container">
+            {photoURL && <img className="review-image" src={photoURL} alt={menuName} />}
+            <div className="review-info">
+                <div className="review-card-header">
+                    <div className="review-card-name">{menuName}</div>
+                    <div className="restaurant-page-category-item">{category}</div>
+                    <div className="restaurant-page-price">Ұ {price}</div>
+                </div>
+
+                <div className="review-card-star">
+                    <StarRating rating={rating} />
+                    <span className="review-card-dot">•</span>
+                    <span className="review-card-star-number">{rating}</span>
+                </div>
+                <div className="review-comment">{comments}</div>
+                {reviewerName.length > 0 && <div className="reviewer-name">From: {reviewerName}</div>}
             </div>
-            <p>{review.comment}</p>
-            <p>Price: {review.price}</p>
-            {review.picture && <img src={review.picture} alt={review.menuName} />}
         </div>
     );
 };

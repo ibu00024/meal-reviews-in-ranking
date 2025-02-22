@@ -18,7 +18,14 @@ class ReviewRepository {
 
   public async insertReview(review: Review): Promise<void> {
     const result = await this.reviewRepo.save(review);
-    console.log("Saved Review ID:", "");
+    console.log("Saved Review ID:", review.review_id);
+  }
+
+  public async getReviewById(restaurantId: number): Promise<Review[]> {
+    return await this.reviewRepo.find({
+      where: { restaurant: { restaurant_id: restaurantId } },
+      relations: ["restaurant", "category"],
+    });
   }
 }
 

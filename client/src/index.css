@@ -112,10 +112,243 @@
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
 }
 
+.image-container {
+  width: 800px;
+  max-width: 750px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+  background-color: #333;
+  border-radius: 10px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+.image-gallery {
+  width: 100%;
+  height: auto;
+}
+
+.image-gallery-slide {
+  background: #000;
+  img {
+    width: auto;
+    height: 400px;
+  }
+}
+
+/*Restaurant page css*/
+
+.restaurant-page-container {
+  margin-top: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  width: 60%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 10px;
+  /*background-color: #333;*/
+  text-align: center;
+  /*box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);*/
+}
+
+.restaurant-page-card {
+  width: 300px;
+  margin-right: 10px;
+}
+
+.restaurant-name-card {
+  padding: 20px;
+  background-color: #333;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  height: 250px;
+}
+
+.restaurant-page-title {
+  margin-top: -2px;
+  margin-bottom: 5px;
+}
+
+.restaurant-page-location {
+  margin-top: 5px;
+  margin-bottom: 25px;
+}
+
+.restaurant-page-main-section {
+  display: flex;
+}
+
+.restaurant-page-category-box {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #333;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  height: 200px;
+}
+
+.restaurant-page-category-header {
+  margin-top: -5px;
+  justify-content: left;
+  text-align: left;
+  width: 100%;
+}
+
+.restaurant-page-category-body {
+  display: flex;
+}
+.restaurant-page-category-item {
+  justify-content: left;
+  text-align: left;
+  margin-left: 10px;
+  padding: 2px 10px;
+  border-radius: 8px;
+  background: rgba(266, 266, 266, 0.1);
+}
+.restaurant-page-map-section {
+  margin-top: 20px;
+  background-color: #333;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  width: 300px;
+  margin-right: 10px;
+  height: fit-content;
+}
+.restaurant-page-review-header {
+  margin-top: 40px;
+  margin-left: 40px;
+  text-align: left;
+  justify-content: left;
+}
+.restaurant-page-review-section {
+  width: 800px;
+  margin-left: 5px;
+}
+
+.card-container {
+  padding: 2px;
+  display: flex;
+  width: 100%;
+  height: 300px;
+  background-color: #333;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}
+
+.review-image {
+  width: 40%;
+  margin-right: 7%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.review-card-header {
+  width: 100%;
+  margin-top: 20px;
+  display: flex;
+}
+
+.review-card-name {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.review-card-star {
+  display: flex;
+}
+
+.review-card-star-number {
+  margin-left: 10px;
+  margin-top: 3px;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.review-card-dot {
+  margin-left: 10px;
+  margin-top: 4px;
+}
+
+.restaurant-page-price {
+  margin-top: 2px;
+  justify-content: right;
+  text-align: right;
+  margin-right: 10%;
+  margin-left: auto;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.review-info {
+  position: relative;
+  width: 100%;
+}
+
+.reviewer-name {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin-bottom: 10px;
+  margin-right: 10%;
+}
+
+.review-comment {
+  text-align: left;
+  max-width: 95%;
+  display: -webkit-box;
+  -webkit-line-clamp: 7; /* Limit to 3 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden; /* Hide extra lines */
+}
+
+.map-container {
+  height: 150px;  /* Adjust as needed */
+  width: 100%; /* Ensure it takes full width */
+  position: relative; /* Keep positioning stable */
+}
+
+
+.restaurant-page-map-container {
+  margin-top: 20px;
+}
+.restaurant-page-map-header {
+  justify-content: left;
+  text-align: left;
+  width: 100%;
+  margin-left: 20px;
+  margin-top: -5px;
+}
+.map-address {
+  margin-top: 5px;
+  padding: 20px;
+  font-size: 18px;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.google-map-button {
+  padding: 10px 15px;
+  background: #3e85bb;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 17px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+@media only screen and (min-width: 601px) {
+  .restaurant-page-container {
+    width: 90%;
+  }
+}
+
 .card-image img {
   width: 100%;
   height: auto;
   object-fit: cover;
 }
-
-/* プロダクト，プロセス，ドキュメントの説明とか */

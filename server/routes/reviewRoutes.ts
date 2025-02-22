@@ -9,5 +9,6 @@ const reviewController = container.get<ReviewController>(
 );
 
 reviewRouter.post("/", reviewController.submitReview);
+reviewRouter.get("/:id", reviewController.getReviews);
 
 export default reviewRouter;
