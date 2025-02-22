@@ -233,7 +233,7 @@ export const FormDataForm = () => {
   };
 
   return (
-    <div>
+    <div className="review-page-container">
       <h2 className="form__title">Review</h2>
       <form className="form" onSubmit={handleSubmit}>
         <div className="form__group">

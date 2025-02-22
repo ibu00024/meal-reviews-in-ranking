@@ -24,26 +24,16 @@ interface Review {
     menuName: string;
     rating: number;
     price: number;
-    comment: string;
+    comments: string;
     photoURL: string;
     category: string;
     reviewerName: string;
 }
 
-const images = [
-    {
-        original: "https://picsum.photos/id/1018/1000/600/",
-        thumbnail: "https://picsum.photos/id/1018/250/150/",
-    },
-    {
-        original: "https://picsum.photos/id/1015/1000/600/",
-        thumbnail: "https://picsum.photos/id/1015/250/150/",
-    },
-    {
-        original: "https://picsum.photos/id/1019/1000/600/",
-        thumbnail: "https://picsum.photos/id/1019/250/150/",
-    },
-];
+interface ApiResponse<T> {
+    success: boolean;
+    data: T;
+}
 
 // Production: fetch data from the API
 const fetchRestaurant = async (id: string): Promise<Restaurant> => {
@@ -51,18 +41,8 @@ const fetchRestaurant = async (id: string): Promise<Restaurant> => {
     if (!response.ok) {
         throw new Error("Failed to fetch restaurant data");
     }
-    const json = await response.json();
-    return {
-        restaurantId: json.data.restaurantId,
-        restaurantName: json.data.restaurantName,
-        coverImage: json.data.coverImage,
-        averageRating: json.data.averageRating,
-        googleMapUrl: json.data.googleMapUrl,
-        restaurantLocation: json.data.restaurantLocation,
-        latitude: json.data.latitude,
-        longitude: json.data.longitude,
-        reviewImages: json.data.reviewImages,
-    };
+    const json: ApiResponse<Restaurant> = await response.json();
+    return json.data;
 };
 
 const fetchReviews = async (id: string): Promise<Review[]> => {
@@ -70,16 +50,8 @@ const fetchReviews = async (id: string): Promise<Review[]> => {
     if (!response.ok) {
         throw new Error("Failed to fetch reviews data");
     }
-    const json = await response.json();
-    return json.data.map(review => ({
-        menuName: review.menuName,
-        rating: review.rating,
-        price: review.price,
-        comment: review.comments,
-        photoURL: review.photoURL,
-        category: review.category,
-        reviewerName: review.reviewerName,
-    }))
+    const json: ApiResponse<Review[]> = await response.json();
+    return json.data
 };
 
 type RestaurantPageParam = {
@@ -89,7 +61,7 @@ type RestaurantPageParam = {
 const RestaurantPage: React.FC = () => {
     const { id } = useParams<RestaurantPageParam>();
     const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
-    const [reviewImage, setReviewImage] = useState<string[]>(images);
+    const [reviewImage, setReviewImage] = useState<string[]>([]);
     const [reviews, setReviews] = useState<Review[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -118,7 +90,7 @@ const RestaurantPage: React.FC = () => {
 
         return Object.entries(categoryCount)
             .sort((a, b) => b[1] - a[1])
-            .slice(0, 5)
+            .slice(0, 10)
             .map(([categoryName]) => categoryName);
     }
 
@@ -136,7 +108,7 @@ const RestaurantPage: React.FC = () => {
                 setCategories(getCategories(reviewsData))
                 setCoordinates([restaurantData.latitude, restaurantData.longitude])
                 setGoogleMapUrl(restaurantData.googleMapUrl)
-            } catch (err) {
+            } catch {
                 setError("An error occurred. Please try again later.");
             } finally {
                 setLoading(false);
@@ -154,18 +126,20 @@ const RestaurantPage: React.FC = () => {
                 <p>{error}</p>
             ) : (
                 <div>
-                    <div className="restaurant-page-main-section">
-                        <div className="restaurant-page-card">
-                            <div className="restaurant-name-card">
-                                <h1 className="restaurant-page-title">{restaurant?.restaurantName}</h1>
-                                <div className="restaurant-page-location">Location: {restaurant?.restaurantLocation}</div>
-                                <div className="card-rating">
-                                    <StarRating rating={restaurant?.averageRating || 0} />
-                                    <span className="rating-text">
+                    <div className="restaurant-name-card">
+                        <div>
+                            <h1 className="restaurant-page-title">{restaurant?.restaurantName}</h1>
+                            <div className="restaurant-page-location">Location: {restaurant?.restaurantLocation}</div>
+                        </div>
+                        <div className="restaurant-card-rating">
+                            <StarRating rating={restaurant?.averageRating || 0} />
+                            <span className="rating-text">
                                         {restaurant?.averageRating.toFixed(1)}/5
-                                    </span>
-                                </div>
-                            </div>
+                            </span>
+                        </div>
+                    </div>
+                    <div className="restaurant-page-main-section">
+                        <div className="restaurant-info-container">
                             <div className="restaurant-page-category-box">
                                 <h3 className="restaurant-page-category-header">Category</h3>
                                 <div className="restaurant-page-category-body">
@@ -179,24 +153,12 @@ const RestaurantPage: React.FC = () => {
                                 </div>
 
                             </div>
-                        </div>
-                        <div className="image-container">
-                            <ImageGallery
-                                items={convertToImageObject(reviewImage)}
-                                showFullscreenButton={false}
-                                showPlayButton={false}
-                                showNav={false}
-                            />
-                        </div>
-                    </div>
-                    <div className="restaurant-page-main-section">
-                        <div className="restaurant-page-map-section">
                             <div className="restaurant-page-map-container">
-                                <h3 className="restaurant-page-map-header">Map</h3>
+                                <div className="restaurant-page-map-header">Map</div>
                                 <MapContainer
                                     center={[coordinates[0], coordinates[1]]}
                                     zoom={16}
-                                    style={{ height: "300px", width: "300px", borderRadius: "10px" }}
+                                    style={{ height: "300px", width: "300px" }}
                                     scrollWheelZoom={false} // Disable zooming
                                     dragging={false} // Disable dragging for a static effect
                                     doubleClickZoom={false} // Disable double-click zoom
@@ -218,12 +180,22 @@ const RestaurantPage: React.FC = () => {
                                 </a>
                             </div>
                         </div>
-                        <div className="restaurant-page-review-section">
-                            <h2 className="restaurant-page-review-header">Reviews</h2>
+                        <div className="restaurant-page-main-container">
+                            <div className="restaurant-image-container">
+                                <ImageGallery
+                                    items={convertToImageObject(reviewImage)}
+                                    showFullscreenButton={false}
+                                    showPlayButton={false}
+                                    showNav={false}
+                                />
+                            </div>
+                            <div className="restaurant-page-review-section">
+                                <div className="restaurant-page-review-header">Reviews</div>
                                 {reviews.map((review, index) => (
                                     <ReviewCard key={index} menuName={review.menuName} rating={review.rating} reviewerName={review.reviewerName} price={review.price}
-                                                comments={review.comment} photoURL={review.photoURL} category={review.category} />
+                                                comments={review.comments} photoURL={review.photoURL} category={review.category} />
                                 ))}
+                            </div>
                         </div>
                     </div>
                 </div>

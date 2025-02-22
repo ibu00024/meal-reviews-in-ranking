@@ -7,7 +7,7 @@ interface AddReviewButtonProps {
 
 const AddReviewButton: React.FC<AddReviewButtonProps> = ({ onClick }) => {
     return (
-        <button className="button" onClick={onClick}>
+        <button className="navbar-button" onClick={onClick}>
             Add Review
         </button>
     );
