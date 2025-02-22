@@ -5,7 +5,9 @@ import { describe, expect, test, vi } from "vitest";
 describe("SearchBar Component", () => {
   test("renders search input field", () => {
     render(<SearchBar onSearch={vi.fn()} />);
-    const inputElement = screen.getByPlaceholderText("Search for a restaurant...");
+    const inputElement = screen.getByPlaceholderText(
+      "Search for a restaurant...",
+    );
     expect(inputElement).toBeInTheDocument();
   });
 
@@ -13,7 +15,9 @@ describe("SearchBar Component", () => {
     const mockOnSearch = vi.fn();
     render(<SearchBar onSearch={mockOnSearch} />);
 
-    const inputElement = screen.getByPlaceholderText("Search for a restaurant...");
+    const inputElement = screen.getByPlaceholderText(
+      "Search for a restaurant...",
+    );
     fireEvent.change(inputElement, { target: { value: "Restaurant A" } });
 
     expect(mockOnSearch).toHaveBeenCalledWith("Restaurant A");
@@ -24,7 +28,9 @@ describe("SearchBar Component", () => {
     const mockOnSearch = vi.fn();
     render(<SearchBar onSearch={mockOnSearch} />);
 
-    const inputElement = screen.getByPlaceholderText("Search for a restaurant...");
+    const inputElement = screen.getByPlaceholderText(
+      "Search for a restaurant...",
+    );
     fireEvent.change(inputElement, { target: { value: "Restaurant A" } });
     expect(inputElement).toHaveValue("Restaurant A");
 

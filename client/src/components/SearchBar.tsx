@@ -1,7 +1,7 @@
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface SearchBarProps {
-    query: string;
+  query: string;
   onSearch: (query: string) => void;
   searchSuggestions: SearchSuggestion[];
   setSuggestions: (suggestions: SearchSuggestion[]) => void;
@@ -12,7 +12,12 @@ export interface SearchSuggestion {
   restaurantName: string;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ query ,onSearch, searchSuggestions, setSuggestions }) => {
+const SearchBar: React.FC<SearchBarProps> = ({
+  query,
+  onSearch,
+  searchSuggestions,
+  setSuggestions,
+}) => {
   const navigate = useNavigate();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,11 +25,11 @@ const SearchBar: React.FC<SearchBarProps> = ({ query ,onSearch, searchSuggestion
   };
 
   const handleOnClick = (restaurantId: number) => {
-      setSuggestions([])
-        onSearch('')
-      navigate("/restaurant/" + restaurantId)
-      navigate(0)
-  }
+    setSuggestions([]);
+    onSearch("");
+    navigate("/restaurant/" + restaurantId);
+    navigate(0);
+  };
 
   return (
     <div className="search-box">
@@ -37,7 +42,13 @@ const SearchBar: React.FC<SearchBarProps> = ({ query ,onSearch, searchSuggestion
       />
       <div className="result-list">
         {searchSuggestions.map((suggestion) => (
-            <div key={suggestion.restaurantId} className="suggest-text" onClick={() => handleOnClick(suggestion.restaurantId)}>{suggestion.restaurantName}</div>
+          <div
+            key={suggestion.restaurantId}
+            className="suggest-text"
+            onClick={() => handleOnClick(suggestion.restaurantId)}
+          >
+            {suggestion.restaurantName}
+          </div>
         ))}
       </div>
     </div>

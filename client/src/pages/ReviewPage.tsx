@@ -3,9 +3,12 @@ import "../formStyles.css";
 import SuccessIcon from "../assets/success-icon.svg";
 import FailIcon from "../assets/fail-icon.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar as solidStar, faStarHalfAlt, faStar as regularStar } from "@fortawesome/free-solid-svg-icons";
+import {
+  faStar as solidStar,
+  faStarHalfAlt,
+  faStar as regularStar,
+} from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-
 
 export const FormDataForm = () => {
   const [username, setUsername] = useState("");
@@ -21,12 +24,13 @@ export const FormDataForm = () => {
   const [isSubmitSuccess, setIsSubmitSuccess] = useState(false);
   const [locationUrl, setLocationUrl] = useState("");
   const [isAddingRestaurant, setIsAddingRestaurant] = useState(false);
-  const [categories, setCategories] = useState<{ categoryID: number; categoryName: string }[]>([]);
+  const [categories, setCategories] = useState<
+    { categoryID: number; categoryName: string }[]
+  >([]);
   const [menuCategory, setMenuCategory] = useState("");
-  const [showSubmitModal, setShowSubmitModal] = useState(false);  // ✅ Controls the success/failure modal
-  const [showAddRestaurantModal, setShowAddRestaurantModal] = useState(false);  // ✅ Controls the Add Restaurant modal
+  const [showSubmitModal, setShowSubmitModal] = useState(false); // ✅ Controls the success/failure modal
+  const [showAddRestaurantModal, setShowAddRestaurantModal] = useState(false); // ✅ Controls the Add Restaurant modal
   const navigate = useNavigate();
-
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -47,7 +51,6 @@ export const FormDataForm = () => {
     fetchCategories();
   }, []);
 
-
   /** Handle searching for a restaurant */
   const handleSearchRestaurant = async () => {
     if (!restaurantName.trim()) {
@@ -56,12 +59,14 @@ export const FormDataForm = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:8000/restaurant/search?name=${restaurantName}`);
+      const response = await fetch(
+        `http://localhost:8000/restaurant/search?name=${restaurantName}`,
+      );
       const result = await response.json();
 
       if (result.data && result.data.length > 0) {
         // Found a restaurant, update name & store ID
-        
+
         setRestaurantName(result.data[0].name);
         setRestaurantId(result.data[0].restaurant_id);
         console.log("Restaurant found:", result.data[0]);
@@ -77,54 +82,54 @@ export const FormDataForm = () => {
 
   const handleAddRestaurant = async () => {
     if (!locationUrl.trim()) {
-        alert("Please enter a Google Map URL.");
-        return;
+      alert("Please enter a Google Map URL.");
+      return;
     }
 
     setIsAddingRestaurant(true);
 
     try {
-        const response = await fetch("http://localhost:8000/restaurant/add", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-            },
-            body: JSON.stringify({ location: locationUrl }),
-        });
+      const response = await fetch("http://localhost:8000/restaurant/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({ location: locationUrl }),
+      });
 
-        const result = await response.json();
-        if (!response.ok || !result.success) {
-            throw new Error(result.message || "Failed to add restaurant.");
-        }
+      const result = await response.json();
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "Failed to add restaurant.");
+      }
 
-        // Update restaurant_name and restaurant_id from API response
-        setRestaurantName(result.data.restaurantName);
-        setRestaurantId(result.data.restaurantId);
+      // Update restaurant_name and restaurant_id from API response
+      setRestaurantName(result.data.restaurantName);
+      setRestaurantId(result.data.restaurantId);
 
-        alert("Restaurant added successfully!");
-        setShowAddRestaurantModal(false);
-        setLocationUrl(""); // Clear input
+      alert("Restaurant added successfully!");
+      setShowAddRestaurantModal(false);
+      setLocationUrl(""); // Clear input
     } catch (error) {
       console.error("Error adding restaurant:", error);
-  
+
       if (error instanceof Error) {
-          alert(`Error: ${error.message}`);
+        alert(`Error: ${error.message}`);
       } else {
-          alert("An unknown error occurred.");
+        alert("An unknown error occurred.");
       }
     } finally {
       setIsAddingRestaurant(false);
     }
-};
-  
+  };
+
   const handleSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
 
     if (!restaurantId) {
       alert("Please search and select a restaurant before submitting.");
       return;
-  }
+    }
 
     // Prepare the JSON body with state values
     const submissionData = {
@@ -135,23 +140,23 @@ export const FormDataForm = () => {
       rating: menuRating,
       price: Number(menuPrice),
       menuName: menuName,
-      comments: comment
+      comments: comment,
     };
 
     console.log("Submitting Data:", submissionData);
 
     try {
       const response = await fetch("http://localhost:8000/review", {
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json",
-          },
-          body: JSON.stringify(submissionData),
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(submissionData),
       });
 
       if (!response.ok) {
-          console.error("Server responded with error status:", response.status);
-          throw new Error(`Submission failed with status ${response.status}`);
+        console.error("Server responded with error status:", response.status);
+        throw new Error(`Submission failed with status ${response.status}`);
       }
 
       const result = await response.json();
@@ -180,7 +185,6 @@ export const FormDataForm = () => {
       setShowSubmitModal(true);
     }
   };
-
 
   /** Handle selecting a rating based on mouse position */
   const handleRatingClick = (event: React.MouseEvent, star: number) => {
@@ -215,10 +219,10 @@ export const FormDataForm = () => {
         method: "POST",
         body: formData,
       });
-      
+
       const result = await response.json();
       console.log("Image Upload Response:", result);
-      
+
       if (result.success && result.url) {
         setImageUrl(result.url);
       } else {
@@ -252,9 +256,11 @@ export const FormDataForm = () => {
         </div>
 
         {/* Restaurant Name + Search Button */}
-        <div className="form__group search-container" >
+        <div className="form__group search-container">
           <div style={{ flexGrow: 1 }}>
-            <label htmlFor="restaurant_name" className="form__label">Restaurant Name</label>
+            <label htmlFor="restaurant_name" className="form__label">
+              Restaurant Name
+            </label>
             <input
               type="text"
               id="restaurant_name"
@@ -264,7 +270,11 @@ export const FormDataForm = () => {
               onChange={(e) => setRestaurantName(e.target.value)}
             />
           </div>
-          <button type="button" className="search-button" onClick={handleSearchRestaurant}>
+          <button
+            type="button"
+            className="search-button"
+            onClick={handleSearchRestaurant}
+          >
             Search
           </button>
         </div>
@@ -286,7 +296,9 @@ export const FormDataForm = () => {
 
         {/* Menu Category Dropdown */}
         <div className="form__group">
-          <label htmlFor="menu_category" className="form__label">Menu Category</label>
+          <label htmlFor="menu_category" className="form__label">
+            Menu Category
+          </label>
           <select
             id="menu_category"
             name="menu_category"
@@ -312,7 +324,9 @@ export const FormDataForm = () => {
           <div className="star-rating">
             {[1, 2, 3, 4, 5].map((star) => {
               const filledStar = (hoverRating || menuRating) >= star; // Full star
-              const halfStar = (hoverRating || menuRating) >= star - 0.5 && (hoverRating || menuRating) < star; // Half star
+              const halfStar =
+                (hoverRating || menuRating) >= star - 0.5 &&
+                (hoverRating || menuRating) < star; // Half star
 
               return (
                 <span
@@ -325,15 +339,21 @@ export const FormDataForm = () => {
                   {filledStar ? (
                     <FontAwesomeIcon icon={solidStar} className="star-filled" />
                   ) : halfStar ? (
-                    <FontAwesomeIcon icon={faStarHalfAlt} className="star-filled" />
+                    <FontAwesomeIcon
+                      icon={faStarHalfAlt}
+                      className="star-filled"
+                    />
                   ) : (
-                    <FontAwesomeIcon icon={regularStar} className="star-empty" />
+                    <FontAwesomeIcon
+                      icon={regularStar}
+                      className="star-empty"
+                    />
                   )}
                 </span>
               );
             })}
           </div>
-          <input type="hidden" name="menu_rating" value={menuRating}/>
+          <input type="hidden" name="menu_rating" value={menuRating} />
         </div>
 
         <div className="form__group">
@@ -368,23 +388,35 @@ export const FormDataForm = () => {
 
         {/* Single Image Upload */}
         <div className="form__group">
-          <label htmlFor="image_upload" className="form__label">Upload an Image</label>
-          <input 
-            type="file" 
-            id="image_upload" 
-            name="image" 
-            className="form__input" 
-            accept="image/*" 
+          <label htmlFor="image_upload" className="form__label">
+            Upload an Image
+          </label>
+          <input
+            type="file"
+            id="image_upload"
+            name="image"
+            className="form__input"
+            accept="image/*"
             onChange={(e) => setImageFile(e.target.files?.[0] || null)}
-            />
+          />
           {imageUrl ? (
             <div className="image-preview">
-                <img src={imageUrl} alt="Uploaded Preview" className="preview-img" />
+              <img
+                src={imageUrl}
+                alt="Uploaded Preview"
+                className="preview-img"
+              />
             </div>
           ) : (
-              <p className="upload-status">No image uploaded yet.</p>
+            <p className="upload-status">No image uploaded yet.</p>
           )}
-          <button type="button" className="upload-button" onClick={handleUploadImage}>Upload</button>
+          <button
+            type="button"
+            className="upload-button"
+            onClick={handleUploadImage}
+          >
+            Upload
+          </button>
         </div>
 
         <button className="submit-button" type="submit">
@@ -400,17 +432,25 @@ export const FormDataForm = () => {
               <div>
                 <img src={SuccessIcon} alt="Success" className="modal-icon" />
                 <h3 className="modal-title-success">Submission Successful!</h3>
-                <p className="modal-text">Your review has been submitted successfully.</p>
-                <button onClick={() => {
-                  setShowSubmitModal(false);
-                  navigate("/");
-                }}>Close</button>
+                <p className="modal-text">
+                  Your review has been submitted successfully.
+                </p>
+                <button
+                  onClick={() => {
+                    setShowSubmitModal(false);
+                    navigate("/");
+                  }}
+                >
+                  Close
+                </button>
               </div>
             ) : (
               <div>
                 <img src={FailIcon} alt="Fail" className="modal-icon" />
                 <h3 className="modal-title-fail">Submission Failed</h3>
-                <p className="modal-text">There was an error submitting your review. Please try again.</p>
+                <p className="modal-text">
+                  There was an error submitting your review. Please try again.
+                </p>
                 <button onClick={() => setShowSubmitModal(false)}>Close</button>
               </div>
             )}
@@ -434,7 +474,11 @@ export const FormDataForm = () => {
             <button onClick={handleAddRestaurant} className="button">
               Submit
             </button>
-            <button onClick={() => setShowAddRestaurantModal(false)} className="button" style={{ marginTop: "10px" }}>
+            <button
+              onClick={() => setShowAddRestaurantModal(false)}
+              className="button"
+              style={{ marginTop: "10px" }}
+            >
               Cancel
             </button>
           </div>

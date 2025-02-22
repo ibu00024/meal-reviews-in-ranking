@@ -8,14 +8,14 @@ import NavigationBar from "./layouts/NavigationBar.tsx";
 const App = () => {
   return (
     <BrowserRouter>
-        <NavigationBar />
-        <Routes>
-            <Route index element={<HomePage />} />
-            <Route path="submit" element={<FormDataForm />} />
-            <Route path="/restaurant/:id" element={<RestaurantPage />} />
+      <NavigationBar />
+      <Routes>
+        <Route index element={<HomePage />} />
+        <Route path="submit" element={<FormDataForm />} />
+        <Route path="/restaurant/:id" element={<RestaurantPage />} />
       </Routes>
     </BrowserRouter>
-  )
+  );
 };
 
 export default App;
