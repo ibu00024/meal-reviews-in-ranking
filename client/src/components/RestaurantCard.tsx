@@ -1,7 +1,9 @@
 import React from "react";
 import StarRating from "./StarRating";
+import {useNavigate} from "react-router-dom";
 
 export interface Restaurant {
+    restaurantId: number;
     restaurantName: string;
     coverImage: string;
     averageRating: number;
@@ -14,8 +16,10 @@ interface RestaurantCardProps {
 }
 
 const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant }) => {
+    const navigate = useNavigate();
+
     return (
-        <div className="card">
+        <div className="card" onClick={() => navigate("/restaurant/" + restaurant.restaurantId)}>
             <div className="card-image">
                 <img src={restaurant.coverImage} alt={restaurant.restaurantName} />
             </div>
