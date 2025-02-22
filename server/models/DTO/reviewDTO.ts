@@ -6,6 +6,7 @@ class ReviewDTO {
   price: number | undefined;
   comments: string | undefined;
   photoURL: string | undefined;
+  category: string | undefined;
 
   constructor(
     reviewId: number | undefined,
@@ -15,6 +16,7 @@ class ReviewDTO {
     price: number | undefined,
     comments: string | undefined,
     photoURL: string | undefined,
+    category: string | undefined,
   ) {
     this.reviewId = reviewId;
     this.menuName = menuName;
@@ -23,6 +25,7 @@ class ReviewDTO {
     this.price = price;
     this.comments = comments;
     this.photoURL = photoURL;
+    this.category = category;
   }
 }
 

@@ -17,6 +17,22 @@ class ReviewController {
     this.reviewService = reviewService;
 
     this.submitReview = this.submitReview.bind(this);
+    this.getReviews = this.getReviews.bind(this);
+  }
+
+  public async getReviews(req: Request, res: Response) {
+    try {
+      const restaurantId = req.params.id as unknown as number;
+      const restaurants =
+        await this.reviewService.getReviewByRestaurantId(restaurantId);
+      res.status(200).json({ success: true, data: restaurants });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: "Internal Server Error",
+        error: (error as Error).message,
+      });
+    }
   }
 
   public async submitReview(req: Request, res: Response) {
