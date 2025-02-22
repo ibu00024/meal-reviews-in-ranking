@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../index.css";
 import RestaurantCard from "../components/RestaurantCard";
 import SearchBar from "../components/SearchBar";
+import AddReviewButton from "../components/AddReviewButton";
+import Logo from "../assets/logo.png";
 
 interface Restaurant {
     restaurantName: string;
@@ -30,6 +33,7 @@ const apiResult: ApiResponse = await fetchRestaurants();
 const apiRestaurants: Restaurant[] = apiResult.data;
 
 const HomePage = () => {
+    const navigate = useNavigate();
     const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -68,7 +72,9 @@ const HomePage = () => {
     return (
         <div className="page-container">
             <div className="search-bar-container">
+                <img src={Logo} alt="Meal Review Logo" className="logo" />
                 <SearchBar onSearch={setSearchQuery} />
+                <AddReviewButton onClick={() => navigate("/submit")} />
             </div>
             {loading ? (
                 <p>Loading...</p>

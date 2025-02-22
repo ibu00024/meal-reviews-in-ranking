@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../formStyles.css";
 import SuccessIcon from "../assets/success-icon.svg";
 import FailIcon from "../assets/fail-icon.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as solidStar, faStarHalfAlt, faStar as regularStar } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
+
 
 export const FormDataForm = () => {
   const [username, setUsername] = useState("");
   const [restaurantName, setRestaurantName] = useState("");
+  const [restaurantId, setRestaurantId] = useState<number | null>(null);
   const [menuName, setMenuName] = useState("");
-  const [menuCategory, setMenuCategory] = useState("");
   const [menuRating, setMenuRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [menuPrice, setMenuPrice] = useState("");
@@ -17,36 +19,129 @@ export const FormDataForm = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isSubmitSuccess, setIsSubmitSuccess] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+  const [locationUrl, setLocationUrl] = useState("");
+  const [isAddingRestaurant, setIsAddingRestaurant] = useState(false);
+  const [categories, setCategories] = useState<{ categoryID: number; categoryName: string }[]>([]);
+  const [menuCategory, setMenuCategory] = useState("");
+  const [showSubmitModal, setShowSubmitModal] = useState(false);  // ✅ Controls the success/failure modal
+  const [showAddRestaurantModal, setShowAddRestaurantModal] = useState(false);  // ✅ Controls the Add Restaurant modal
+  const navigate = useNavigate();
 
-  
-  // Define menu categories as a constant object
-  const MENU_CATEGORIES: { [key: number]: string } = {
-    1: "Appetizer",
-    2: "Main Course",
-    3: "Dessert",
-    4: "Beverage",
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/category");
+        const result = await response.json();
+
+        if (result.success && result.data.length > 0) {
+          setCategories(result.data);
+        } else {
+          console.warn("No categories found");
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+
+  /** Handle searching for a restaurant */
+  const handleSearchRestaurant = async () => {
+    if (!restaurantName.trim()) {
+      alert("Please enter a restaurant name.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:8000/restaurant/search?name=${restaurantName}`);
+      const result = await response.json();
+
+      if (result.data && result.data.length > 0) {
+        // Found a restaurant, update name & store ID
+        
+        setRestaurantName(result.data[0].name);
+        setRestaurantId(result.data[0].restaurant_id);
+        console.log("Restaurant found:", result.data[0]);
+      } else {
+        // No restaurant found, open the modal to add new restaurant info
+        setShowAddRestaurantModal(true);
+      }
+    } catch (error) {
+      console.error("Error searching restaurant:", error);
+      alert("Failed to search for the restaurant. Please try again.");
+    }
   };
-  
 
+  const handleAddRestaurant = async () => {
+    if (!locationUrl.trim()) {
+        alert("Please enter a Google Map URL.");
+        return;
+    }
+
+    setIsAddingRestaurant(true);
+
+    try {
+        const response = await fetch("http://localhost:8000/restaurant/add", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+            body: JSON.stringify({ location: locationUrl }),
+        });
+
+        const result = await response.json();
+        if (!response.ok || !result.success) {
+            throw new Error(result.message || "Failed to add restaurant.");
+        }
+
+        // Update restaurant_name and restaurant_id from API response
+        setRestaurantName(result.data.restaurantName);
+        setRestaurantId(result.data.restaurantId);
+
+        alert("Restaurant added successfully!");
+        setShowAddRestaurantModal(false);
+        setLocationUrl(""); // Clear input
+    } catch (error) {
+      console.error("Error adding restaurant:", error);
+  
+      if (error instanceof Error) {
+          alert(`Error: ${error.message}`);
+      } else {
+          alert("An unknown error occurred.");
+      }
+    } finally {
+      setIsAddingRestaurant(false);
+    }
+};
+  
   const handleSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
+
+    if (!restaurantId) {
+      alert("Please search and select a restaurant before submitting.");
+      return;
+  }
+
     // Prepare the JSON body with state values
     const submissionData = {
       username: username || "Anonymous", // Default to "Anonymous" if empty
-      restaurant_name: restaurantName,
-      menu_name: menuName,
-      menu_category: menuCategory,
-      menu_rating: menuRating,
-      menu_price: menuPrice,
-      comment: comment,
-      image_url: imageUrl, // Ensure an empty string if no image
+      restaurantId: restaurantId,
+      categoryId: Number(menuCategory),
+      pictureURL: imageUrl,
+      rating: menuRating,
+      price: Number(menuPrice),
+      menuName: menuName,
+      comments: comment
     };
 
     console.log("Submitting Data:", submissionData);
 
     try {
-      const response = await fetch("http://localhost:8000/submit", {
+      const response = await fetch("http://localhost:8000/review", {
           method: "POST",
           headers: {
               "Content-Type": "application/json",
@@ -64,7 +159,7 @@ export const FormDataForm = () => {
 
       // SUCCESS: Show modal and reset form
       setIsSubmitSuccess(true);
-      setShowModal(true);
+      setShowSubmitModal(true);
 
       // Reset form fields only on successful submission
       setUsername("");
@@ -76,12 +171,13 @@ export const FormDataForm = () => {
       setComment("");
       setImageFile(null);
       setImageUrl(null);
+      setRestaurantId(null);
     } catch (error) {
       console.error("Error submitting form:", error);
 
       // FAILURE: Show modal but DO NOT reset the form
       setIsSubmitSuccess(false);
-      setShowModal(true);
+      setShowSubmitModal(true);
     }
   };
 
@@ -155,19 +251,22 @@ export const FormDataForm = () => {
           />
         </div>
 
-        <div className="form__group">
-          <label htmlFor="restaurant_name" className="form__label">
-            Restaurant Name
-          </label>
-          <input
-            type="text"
-            id="restaurant_name"
-            name="restaurant_name"
-            className="form__input"
-            value={restaurantName}
-            onChange={(e) => setRestaurantName(e.target.value)}
-            // required
-          />
+        {/* Restaurant Name + Search Button */}
+        <div className="form__group search-container" >
+          <div style={{ flexGrow: 1 }}>
+            <label htmlFor="restaurant_name" className="form__label">Restaurant Name</label>
+            <input
+              type="text"
+              id="restaurant_name"
+              name="restaurant_name"
+              className="form__input"
+              value={restaurantName}
+              onChange={(e) => setRestaurantName(e.target.value)}
+            />
+          </div>
+          <button type="button" className="search-button" onClick={handleSearchRestaurant}>
+            Search
+          </button>
         </div>
 
         <div className="form__group">
@@ -185,21 +284,26 @@ export const FormDataForm = () => {
           />
         </div>
 
+        {/* Menu Category Dropdown */}
         <div className="form__group">
-          <label htmlFor="menu_category" className="form__label">
-            Menu Category
-          </label>
-          <select 
-            id="menu_category" 
-            name="menu_category" 
+          <label htmlFor="menu_category" className="form__label">Menu Category</label>
+          <select
+            id="menu_category"
+            name="menu_category"
             className="form__input"
             value={menuCategory}
             onChange={(e) => setMenuCategory(e.target.value)}
-            >
+          >
             <option value="">Select a category</option>
-            {Object.entries(MENU_CATEGORIES).map(([key, value]) => (
-                <option key={key} value={key}>{value}</option>
-            ))}
+            {categories.length > 0 ? (
+              categories.map((category) => (
+                <option key={category.categoryID} value={category.categoryID}>
+                  {category.categoryName}
+                </option>
+              ))
+            ) : (
+              <option disabled>Loading categories...</option>
+            )}
           </select>
         </div>
 
@@ -280,15 +384,16 @@ export const FormDataForm = () => {
           ) : (
               <p className="upload-status">No image uploaded yet.</p>
           )}
-          <button type="button" className="button" onClick={handleUploadImage}>Upload</button>
+          <button type="button" className="upload-button" onClick={handleUploadImage}>Upload</button>
         </div>
 
-        <button className="button" type="submit">
+        <button className="submit-button" type="submit">
           Submit
         </button>
       </form>
 
-      {showModal && (
+      {/* Show submission modal*/}
+      {showSubmitModal && (
         <div className="modal-container">
           <div className="modal-content">
             {isSubmitSuccess ? (
@@ -296,16 +401,42 @@ export const FormDataForm = () => {
                 <img src={SuccessIcon} alt="Success" className="modal-icon" />
                 <h3 className="modal-title-success">Submission Successful!</h3>
                 <p className="modal-text">Your review has been submitted successfully.</p>
-                <button onClick={() => setShowModal(false)}>Close</button>
+                <button onClick={() => {
+                  setShowSubmitModal(false);
+                  navigate("/");
+                }}>Close</button>
               </div>
             ) : (
               <div>
                 <img src={FailIcon} alt="Fail" className="modal-icon" />
                 <h3 className="modal-title-fail">Submission Failed</h3>
                 <p className="modal-text">There was an error submitting your review. Please try again.</p>
-                <button onClick={() => setShowModal(false)}>Close</button>
+                <button onClick={() => setShowSubmitModal(false)}>Close</button>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Modal for Adding New Restaurant */}
+      {showAddRestaurantModal && (
+        <div className="modal-container">
+          <div className="modal-content">
+            <h3 className="modal-title">Add Restaurant Information</h3>
+            <p>Please provide the Google Map URL for this restaurant.</p>
+            <input
+              type="text"
+              className="form__input"
+              placeholder="Enter Google Map URL"
+              value={locationUrl}
+              onChange={(e) => setLocationUrl(e.target.value)}
+            />
+            <button onClick={handleAddRestaurant} className="button">
+              Submit
+            </button>
+            <button onClick={() => setShowAddRestaurantModal(false)} className="button" style={{ marginTop: "10px" }}>
+              Cancel
+            </button>
           </div>
         </div>
       )}
