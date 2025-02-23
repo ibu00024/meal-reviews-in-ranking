@@ -1,13 +1,14 @@
 import React from "react";
 import StarRating from "./StarRating";
 
-export interface Review {
-    restaurant: string;
+interface Review {
+    reviewId: number;
     menuName: string;
-    menuRating: number;
+    reviewerName: string;
+    rating: number;
     price: number;
     comment: string;
-    picture: string; // URL to the image
+    photoURL: string; // URL to the image
 }
 
 interface ReviewCardProps {
@@ -19,12 +20,12 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
         <div className="card">
             <h3 className="card-title">{review.menuName}</h3>
             <div className="card-rating">
-                <StarRating rating={review.menuRating} />
-                <span className="rating-text">{review.menuRating}</span>
+                <StarRating rating={review.rating} />
+                <span className="rating-text">{review.rating}</span>
             </div>
             <p>{review.comment}</p>
             <p>Price: {review.price}</p>
-            {review.picture && <img src={review.picture} alt={review.menuName} />}
+            {review.photoURL && <img src={review.photoURL} alt={review.menuName} />}
         </div>
     );
 };

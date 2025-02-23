@@ -1,73 +1,98 @@
 import { useEffect, useState } from "react";
 import StarRating from "../components/StarRating";
 import ReviewCard from "../components/ReviewCard";
+import { A } from "vitest/dist/chunks/environment.d8YfPkTm.js";
 
 interface Restaurant {
-    name: string;
-    location: string;
-    imageUrl: string;
-    rating: number;
+    restaurantId: number;
+    restaurantName: string;
+    coverImage: string;
+    averageRating: number;
+    googleMapUrl: string;
+    restaurantLocation: string;
+    latitude: number;
+    longitude: number;
+    reviews: Review[];
 }
 
 interface Review {
-    restaurant: string;
+    reviewId: number;
     menuName: string;
-    menuRating: number;
+    reviewerName: string;
+    rating: number;
     price: number;
     comment: string;
-    picture: string; // URL to the image
+    photoURL: string; // URL to the image
+}
+
+interface ApiResponse {
+    success: boolean;
+    data: Restaurant;
 }
 
 // Production: fetch data from the API
-const fetchRestaurant = async (id: number): Promise<Restaurant> => {
-    const response = await fetch(`/api/restaurant/${id}`); // TODO: replace with actual API endpoint
+const fetchRestaurant = async (id: number): Promise<ApiResponse> => {
+    const response = await fetch(`http://localhost:8000/restaurant/${id}`); // TODO: replace with actual API endpoint
     if (!response.ok) {
         throw new Error("Failed to fetch restaurant data");
     }
     return response.json();
 };
 
-const fetchReviews = async (id: number): Promise<Review[]> => {
-    const response = await fetch(`/api/reviews/${id}`); // TODO: replace with actual API endpoint
-    if (!response.ok) {
-        throw new Error("Failed to fetch reviews data");
-    }
-    return response.json();
-};
+// const fetchReviews = async (id: number): Promise<ApiResponse> => {
+//     const response = await fetch(`http://localhost:8000/reviews/${id}`); // TODO: replace with actual API endpoint
+//     if (!response.ok) {
+//         throw new Error("Failed to fetch reviews data");
+//     }
+//     return response.json();
+// };
 
 // Development: use mock data
-const mockRestaurant: Restaurant = {
-    name: "Restaurant A",
-    location: "Nara",
-    imageUrl: "",
-    rating: 3,
-}
-const mockReviews: Review[] = [
-    {
-        restaurant: "Restaurant A",
-        menuName: "Ramen AA",
-        menuRating: 2,
-        price: 1500,
-        comment: "The sushi was fresh and delicious!",
-        picture: "https://example.com/sushi.jpg",
-    },
-    {
-        restaurant: "Restaurant A",
-        menuName: "Ramen BB",
-        menuRating: 4,
-        price: 1200,
-        comment: "The ramen was flavorful and satisfying.",
-        picture: "https://example.com/ramen.jpg",
-    },
-    {
-        restaurant: "Restaurant A",
-        menuName: "Ramen CC",
-        menuRating: 3,
-        price: 1200,
-        comment: "The ramen was flavorful and satisfying.",
-        picture: "https://example.com/ramen.jpg",
-    },
-];
+// const mockRestaurant: Restaurant = {
+//     restaurantId: 1,
+//     restaurantName: "Restaurant A",
+//     coverImage: "https://example.com/sashimi.jpg",
+//     restaurantLocation: "Nara",
+//     averageRating: 3,
+//     googleMapUrl: "https://goo.gl/maps/abc",
+//     latitude: 34.685087,
+//     longitude: 135.804865,
+//     reviews: [],
+// }
+// const mockReviews: Review[] = [
+//     {
+//         reviewId: 1,
+//         menuName: "Ramen AA",
+//         reviewerName: "Alice",
+//         rating: 2,
+//         price: 1500,
+//         comment: "The sushi was fresh and delicious!",
+//         photoURL: "https://example.com/sushi.jpg",
+//     },
+//     {
+//         reviewId: 2,
+//         menuName: "Ramen BB",
+//         reviewerName: "Bob",
+//         rating: 4,
+//         price: 1200,
+//         comment: "The ramen was flavorful and satisfying.",
+//         photoURL: "https://example.com/ramen.jpg",
+//     },
+//     {
+//         reviewId: 3,
+//         menuName: "Ramen CC",
+//         reviewerName: "Charlie",
+//         rating: 3,
+//         price: 1200,
+//         comment: "The ramen was flavorful and satisfying.",
+//         photoURL: "https://example.com/ramen.jpg",
+//     },
+// ];
+
+
+let apiResult = await fetchRestaurant(1);
+const mockRestaurant: Restaurant = apiResult.data;
+const mockReviews: Review[] = mockRestaurant.reviews;
 
 
 const RestaurantPage = () => {
@@ -83,8 +108,10 @@ const RestaurantPage = () => {
                 let reviewsData: Review[];
                 if (import.meta.env.PROD) {
                     // Fetch data from the API in production
-                    restaurantData = await fetchRestaurant(1);
-                    reviewsData = await fetchReviews(1);
+                    let apiResult = await fetchRestaurant(1);
+                    // reviewsData = await fetchReviews(1);
+                    restaurantData = apiResult.data;
+                    reviewsData = restaurantData.reviews;
 
                 } else {
                     // Use mock data in development
@@ -111,16 +138,16 @@ const RestaurantPage = () => {
                 <p>{error}</p>
             ) : (
                 <div>
-                    <h1 className="title">{restaurant?.name}</h1>
+                    <h1 className="title">{restaurant?.restaurantName}</h1>
                     <div className="restaurantData">
                         <div className="card-rating">
-                            <StarRating rating={restaurant?.rating || 0} />
+                            <StarRating rating={restaurant?.averageRating || 0} />
                             <span className="rating-text">
-                                {restaurant?.rating.toFixed(1)}/5
+                                {restaurant?.averageRating.toFixed(1)}/5
                             </span>
                         </div>
-                        <p>Location: {restaurant?.location}</p>
-                        <img src={restaurant?.imageUrl} alt={restaurant?.name} />
+                        <p>Location: {restaurant?.restaurantLocation}</p>
+                        <img src={restaurant?.coverImage} alt={restaurant?.restaurantName} />
                     </div>
                     <h2>Reviews</h2>
                     <div className="content-grid">
