@@ -9,8 +9,8 @@ class MapService {
   private mapRepository: MapRepository;
 
   constructor(
-      @inject(SERVICE_IDENTIFIER.MAP_REPOSITORY)
-      mapRepository: MapRepository,
+    @inject(SERVICE_IDENTIFIER.MAP_REPOSITORY)
+    mapRepository: MapRepository,
   ) {
     this.mapRepository = mapRepository;
   }
@@ -25,7 +25,7 @@ class MapService {
   }
 
   public async getPlaceDetails(url: string) {
-    const longUrl = await this.mapRepository.getLongUrl(url)
+    const longUrl = await this.mapRepository.getLongUrl(url);
     const placeId = this.getFTIDFromUrl(longUrl);
     return this.mapRepository.getPlaceDetails(placeId);
   }

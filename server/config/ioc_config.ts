@@ -59,9 +59,9 @@ container
   .to(MapService)
   .inSingletonScope();
 container
-    .bind<MapRepository>(SERVICE_IDENTIFIER.MAP_REPOSITORY)
-    .to(MapRepository)
-    .inSingletonScope();
+  .bind<MapRepository>(SERVICE_IDENTIFIER.MAP_REPOSITORY)
+  .to(MapRepository)
+  .inSingletonScope();
 container
   .bind<CategoryController>(SERVICE_IDENTIFIER.CATEGORY_CONTROLLER)
   .to(CategoryController)
