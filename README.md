@@ -29,11 +29,11 @@ npm install
 
 ## Init Database:
 ```
-cd client 
-npm run dev
+docker compose build
+docker compose up -d
 ```
 
-# Start
+# Start-Up
 ## server(backend) start-up
 ```
 cd client 
