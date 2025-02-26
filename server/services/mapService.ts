@@ -98,11 +98,11 @@ class MapService {
         const place = response.data.results[0];
         return place;
       } else {
-        console.log("一致する場所が見つかりませんでした。");
+        console.log("No matching locations were found");
         return null;
       }
     } catch (error) {
-      console.error("エラーが発生しました:", error);
+      console.error("An error has occurred:", error);
     }
   }
 
@@ -164,7 +164,7 @@ class MapService {
             };
 
     } catch (error) {
-      console.error('情報取得に失敗しました:', (error as Error).message);
+      console.error('Failed to retrieve information:', (error as Error).message);
       return null;
     }
   }
