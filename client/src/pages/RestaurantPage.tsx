@@ -24,6 +24,7 @@ interface Restaurant {
   "delivery": boolean;
   "dine_in": boolean;
   "open_hour": string[];
+  "price_level": number;
 }
 
 interface Review {
@@ -236,8 +237,6 @@ const RestaurantPage: React.FC = () => {
                         Google Maps
                       </a>
                     </div>
-
-                    {/* Phone Number */}
                     <div className="info-row">
                       <span>
                         <span className="info-title">Phone number: </span>
@@ -245,12 +244,11 @@ const RestaurantPage: React.FC = () => {
                       </span>
                       <FaPhone className="info-icon" />
                     </div>
-
-                    {/* Menu & Prices */}
                     <div className="info-row">
                       <span>
                         <span className="info-title">Price: </span>
-                        <span className="info-value">$$$</span>
+                        {console.log(restaurant?.price_level)}
+                        <span className="info-value">{restaurant?.price_level && restaurant.price_level != -1 ? "$".repeat(restaurant.price_level + 1) : "  -  "}</span>
                       </span>
                       <FaDollarSign className="info-icon" />
                     </div>

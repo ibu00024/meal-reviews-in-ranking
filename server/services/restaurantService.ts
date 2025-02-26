@@ -165,8 +165,8 @@ class RestaurantService {
     )[0]?.long_name;
     restaurantData.name = restaurantDetails.name;
     restaurantData.location = restaurantDetails.url;
-    restaurantData.phone_number = restaurantDetails.international_phone_number;
-    restaurantData.price_level = restaurantDetails.price_level;
+    restaurantData.phone_number = restaurantDetails.international_phone_number ?? "";
+    restaurantData.price_level = restaurantDetails.price_level ?? -1;
   }
 }
 
