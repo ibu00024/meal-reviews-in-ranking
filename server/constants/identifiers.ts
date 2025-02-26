@@ -9,6 +9,7 @@ const SERVICE_IDENTIFIER = {
   IMAGE_SERVICE: Symbol.for("ImageService"),
   IMAGE_REPOSITORY: Symbol.for("ImageRepository"),
   MAP_SERVICE: Symbol.for("MapService"),
+  MAP_REPOSITORY: Symbol.for("MapRepository"),
   CATEGORY_CONTROLLER: Symbol.for("CategoryController"),
   CATEGORY_REPOSITORY: Symbol.for("CategoryRepository"),
   REVIEW_SERVICE: Symbol.for("ReviewService"),
