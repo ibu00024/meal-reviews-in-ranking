@@ -125,7 +125,7 @@ class RestaurantService {
     }
     return restaurants;
   }
-
+  
   public async searchRestaurant(keyword: string) {
     const searchLimitSize = this.config.serverConfig.SEARCH_LIMIT;
     return await this.restaurantRepository.searchRestaurants(
@@ -135,19 +135,15 @@ class RestaurantService {
   }
 
   public async addRestaurant(restaurantData: Partial<Restaurant>) {
+
+    const apiData = await this.mapService.getPlaceInfoFromURL(restaurantData.location!,this.config.serverConfig.GOOGLE_MAPS_API_KEY);
+
     if (!restaurantData.lat || !restaurantData.lon) {
       // 📌 Google Maps の短縮 URL から緯度・経度を取得
-      const coordinates =
-        await this.mapService.getLatLonAndPlaceNameFromGoogleMapsShortUrl(
-          restaurantData.location!,
-        );
-      if (!coordinates) {
-        throw new Error("Failed to fetch coordinates");
-      }
-      restaurantData.lat = coordinates.lat;
-      restaurantData.lon = coordinates.lon;
+      restaurantData.lat = apiData.lat;
+      restaurantData.lon = apiData.lon;
       if (!restaurantData.name) {
-        restaurantData.name = coordinates.restaurantName;
+        restaurantData.name = apiData.name;
       }
     }
 
@@ -172,6 +168,10 @@ class RestaurantService {
       !restaurantData.country
     ) {
       throw new Error("Missing required fields");
+    }
+    const locationLength = restaurantData.location?.length ?? 0;
+    if (locationLength > 255) {
+      restaurantData.location = `https://www.google.com/maps/place/?q=place_id:${apiData.placeId}`;
     }
 
     // レストランをデータベースに保存

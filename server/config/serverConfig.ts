@@ -7,6 +7,8 @@ class ServerConfig {
   DEBUG: boolean = true;
 
   SEARCH_LIMIT: number = 10;
+
+  GOOGLE_MAPS_API_KEY: string = "";
 }
 
 export default ServerConfig;
