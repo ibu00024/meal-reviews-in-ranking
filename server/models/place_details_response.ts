@@ -1,7 +1,7 @@
 import {AxiosResponse} from "axios";
 
 export interface PlaceData {
-    // address_components: AddressComponent[];
+    address_components: AddressComponent[];
     formatted_address: string;
     /** is a representation of the place's address in the [adr microformat](http://microformats.org/wiki/adr). */
     adr_address: string;
@@ -65,6 +65,9 @@ export interface PlaceData {
     vicinity: string;
     /** lists the authoritative website for this place, such as a business' homepage. */
     website: string;
+
+    delivery: boolean;
+    dine_in: boolean;
 }
 
 export interface LatLngLiteral {
@@ -91,6 +94,19 @@ export interface OpeningHoursTime {
      * will be reported in the place's time zone.
      */
     time?: string;
+}
+
+export interface AddressComponent {
+    /** is an array indicating the *type* of the address component. */
+    types: string[];
+    /** is the full text description or name of the address component as returned by the Geocoder. */
+    long_name: string;
+    /**
+     * is an abbreviated textual name for the address component, if available.
+     * For example, an address component for the state of Alaska may have a `long_name` of "Alaska" and a `short_name` of "AK"
+     * using the 2-letter postal abbreviation.
+     */
+    short_name: string;
 }
 
 export interface OpeningPeriod {
