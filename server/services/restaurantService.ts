@@ -140,7 +140,7 @@ class RestaurantService {
     );
     this.mapRestaurantDetails(restaurantData, restaurantDetails);
 
-    await this.restaurantRepository.createRestaurant(restaurantData);
+    return await this.restaurantRepository.createRestaurant(restaurantData);
   }
 
   private mapRestaurantDetails(
@@ -150,18 +150,18 @@ class RestaurantService {
     restaurantData.lat = restaurantDetails.geometry?.location.lat;
     restaurantData.lon = restaurantDetails.geometry?.location.lng;
     restaurantData.address = restaurantDetails.formatted_address;
-    restaurantData.delivery = restaurantDetails.delivery;
-    restaurantData.dine_in = restaurantDetails.dine_in;
+    restaurantData.delivery = restaurantDetails.delivery ?? true;
+    restaurantData.dine_in = restaurantDetails.dine_in ?? true;
     restaurantData.open_date =
       restaurantDetails.opening_hours?.weekday_text.join(";");
     restaurantData.country = restaurantDetails.address_components?.filter((x) =>
       x.types.includes("country"),
-    )[0].long_name;
+    )[0]?.long_name;
     restaurantData.city = restaurantDetails.address_components?.filter(
       (x) =>
         x.types.includes("administrative_area_level_3") ||
         x.types.includes("locality"),
-    )[0].long_name;
+    )[0]?.long_name;
     restaurantData.name = restaurantDetails.name;
     restaurantData.location = restaurantDetails.url;
     restaurantData.phone_number = restaurantDetails.international_phone_number;

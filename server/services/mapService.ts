@@ -16,18 +16,24 @@ class MapService {
   }
 
   public getFTIDFromUrl(url: string) {
-    const pattern = /(0x[0-9a-fA-F]+:0x[0-9a-fA-F]+)/;
-    const match = url.match(pattern);
+    const pattern = /(0x[0-9a-fA-F]+:0x[0-9a-fA-F]+)/g;
+    const match = [...url.matchAll(pattern)];
     if (!match || match.length === 0) {
       throw new Error("Cannot extract place id from url");
     }
-    return match[1];
+    return match;
   }
 
   public async getPlaceDetails(url: string) {
     const longUrl = await this.mapRepository.getLongUrl(url);
-    const placeId = this.getFTIDFromUrl(longUrl);
-    return this.mapRepository.getPlaceDetails(placeId);
+    const possiblePlaceIds = this.getFTIDFromUrl(longUrl);
+    for (const placeId of possiblePlaceIds) {
+      const result = await this.mapRepository.getPlaceDetails(placeId[0]);
+      if (result.name != '1') {
+        return result;
+      }
+    }
+    throw new Error("Could not find place details");
   }
 }
 
