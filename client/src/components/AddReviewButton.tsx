@@ -1,16 +1,16 @@
 import React from "react";
-import "../index.css"
+import "../index.css";
 
 interface AddReviewButtonProps {
-    onClick: () => void;
+  onClick: () => void;
 }
 
 const AddReviewButton: React.FC<AddReviewButtonProps> = ({ onClick }) => {
-    return (
-        <button className="button" onClick={onClick}>
-            Add Review
-        </button>
-    );
+  return (
+    <button className="navbar-button" onClick={onClick}>
+      Add Review
+    </button>
+  );
 };
 
 export default AddReviewButton;
