@@ -71,6 +71,86 @@
   right: 20px;
 }
 
+.restaurant-page-address {
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.restaurant-page-information-container {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  background-color: #333;
+  border-radius: 10px;
+  width: 100%;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.map-wrapper {
+  flex-shrink: 0; /* Prevents resizing */
+  padding: 15px 0 15px 15px;
+}
+
+.restaurant-info {
+  flex-grow: 1;
+}
+
+.restaurant-address {
+  margin-top: 15px;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+}
+
+.direction-button {
+  background-color: #f1f1f1;
+  color: #333;
+  padding: 5px 10px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.direction-button:hover {
+  background-color: #ddd;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+  margin: 0 20px 0 20px;
+  text-align: left;
+  padding: 10px 0;
+}
+
+.info-row:not(:first-child) {
+  border-top: 1px solid #666;
+  padding: 20px 0;
+}
+
+.info-title {
+  font-weight: 700;
+}
+
+.info-value {
+  font-weight: 400;
+  text-align: left;
+}
+
+.info-icon {
+  font-size: 18px;
+  color: #555;
+}
+
 .rating-text {
   margin-right: 8px;
   font-weight: bold;
@@ -98,7 +178,7 @@
   align-items: center;
   justify-content: left;
   width: 100vw;
-  margin: 0;
+  margin: -5px 0 0 0;
   position: relative;
   height: fit-content;
   background-color: rgb(46, 46, 46);
@@ -155,9 +235,10 @@
 
 .navbar-button {
   height: 40px;
-  background-color: #007BFF;
+  background-color: #d3c058;
   padding: 0 20px;
-  color: white;
+  color: #222;
+  font-weight: bold;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -424,50 +505,85 @@
   overflow: hidden; /* Hide extra lines */
 }
 
-.map-container {
-  height: 150px;  /* Adjust as needed */
-  width: 100%; /* Ensure it takes full width */
-  position: relative; /* Keep positioning stable */
-}
-
-
-.restaurant-page-map-container {
+.restaurant-restaurant-type {
   margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 5px;
   background-color: #333;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.6);
   border-radius: 10px;
-  padding-top: 5px;
-  padding-bottom: 5px;
+}
 
+.service-item-text {
+  color: #ffffff;
 }
-.restaurant-page-map-header {
-  justify-content: left;
-  text-align: left;
-  width: 100%;
-  font-size: 25px;
+.service-item {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  color: #333;
+}
+
+.service-header {
   font-weight: bold;
-  margin-left: 5%;
-  margin-bottom: 5px;
+  font-size: 20px;
+  text-align: left;
+  margin-top: -5px;
 }
-.map-address {
+
+.service-icon {
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+.check {
+  color: green;
+}
+
+.cross {
+  color: red;
+}
+
+.restaurant-hours-container {
+  margin-top: 20px;
+  background-color: #333;
+  padding: 10px 20px;
+  border-radius: 8px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+.hours-title {
   margin-top: 5px;
-  padding: 20px;
   font-size: 18px;
-  font-weight: 500;
-  text-align: center;
-  margin-bottom: 20px;
-}
-.google-map-button {
-  padding: 10px 15px;
-  background: #3e85bb;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 17px;
-  margin-top: 12px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
   margin-bottom: 10px;
 }
+
+.clock-icon {
+  color: #c6c6c6;
+  margin-left: 8px;
+}
+
+.hours-list {
+  list-style: none;
+  padding: 0;
+}
+
+.hours-item {
+  font-size: 16px;
+  padding: 10px 0;
+  color: #ffffff;
+  border-bottom: 1px solid #666;
+}
+
+.hours-item:last-child {
+  border-bottom: none; /* Remove border from the last item */
+}
+
 @media only screen and (min-width: 601px) {
   .restaurant-page-container {
     width: 90%;
