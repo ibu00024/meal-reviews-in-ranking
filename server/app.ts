@@ -10,8 +10,10 @@ import MinioConnection from "./utils/minioConnection";
 import imageRoutes from "./routes/imageRoutes";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import reviewRouter from "./routes/reviewRoutes";
+import logger from "./middleware/logger";
 
 let config = container.get<Config>(SERVICE_IDENTIFIER.CONFIG);
+container.applyMiddleware(logger)
 
 const app = express();
 
