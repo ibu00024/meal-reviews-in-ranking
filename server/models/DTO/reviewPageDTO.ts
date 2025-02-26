@@ -16,6 +16,7 @@ class ReviewPageDTO {
   delivery: boolean | undefined;
   dine_in: boolean | undefined;
   open_hour: string[];
+  price_level: number | undefined;
 
   constructor(
     restaurantId: number | undefined,
@@ -32,6 +33,7 @@ class ReviewPageDTO {
     delivery: boolean | undefined,
     dine_in: boolean | undefined,
     open_hour: string[],
+    price_level: number | undefined,
   ) {
     this.restaurantId = restaurantId;
     this.restaurantName = restaurantName;
@@ -47,6 +49,7 @@ class ReviewPageDTO {
     this.delivery = delivery;
     this.dine_in = dine_in;
     this.open_hour = open_hour;
+    this.price_level = price_level;
   }
 }
 

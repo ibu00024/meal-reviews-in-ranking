@@ -29,7 +29,7 @@ class MapService {
     const possiblePlaceIds = this.getFTIDFromUrl(longUrl);
     for (const placeId of possiblePlaceIds) {
       const result = await this.mapRepository.getPlaceDetails(placeId[0]);
-      if (result.name != '1') {
+      if (result.name != "1") {
         return result;
       }
     }

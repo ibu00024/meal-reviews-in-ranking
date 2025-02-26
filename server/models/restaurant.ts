@@ -46,6 +46,9 @@ export class Restaurant {
   @Column({ type: "text" })
   open_date!: string;
 
+  @Column({ type: "int" })
+  price_level!: number;
+
   @OneToMany(() => Review, (review) => review.restaurant)
   reviews!: Review[];
 }
