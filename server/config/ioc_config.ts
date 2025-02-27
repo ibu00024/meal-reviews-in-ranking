@@ -17,6 +17,7 @@ import CategoryRepository from "../repositories/categoryRepository";
 import ReviewService from "../services/reviewService";
 import ReviewRepository from "../repositories/reviewRepository";
 import ReviewController from "../controllers/reviewController";
+import MapRepository from "../repositories/mapRepository";
 
 let container = new Container();
 
@@ -56,6 +57,10 @@ container
 container
   .bind<MapService>(SERVICE_IDENTIFIER.MAP_SERVICE)
   .to(MapService)
+  .inSingletonScope();
+container
+  .bind<MapRepository>(SERVICE_IDENTIFIER.MAP_REPOSITORY)
+  .to(MapRepository)
   .inSingletonScope();
 container
   .bind<CategoryController>(SERVICE_IDENTIFIER.CATEGORY_CONTROLLER)

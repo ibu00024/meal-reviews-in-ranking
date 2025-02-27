@@ -7,6 +7,7 @@ import Config from "../config/config";
 import { Review } from "../models/review";
 import ReviewPageDTO from "../models/DTO/reviewPageDTO";
 import MapService from "../services/mapService";
+import { Place } from "../models/place_details_response";
 
 @injectable()
 class RestaurantService {
@@ -69,6 +70,12 @@ class RestaurantService {
       restaurant.lat,
       restaurant.lon,
       reviewImages,
+      restaurant.address,
+      restaurant.phone_number,
+      restaurant.delivery,
+      restaurant.dine_in,
+      restaurant.open_date.split(";"),
+      restaurant.price_level,
     );
   }
 
@@ -117,15 +124,6 @@ class RestaurantService {
     );
   }
 
-  public async completeRestaurantData2(restaurants: HomePageDTO[]) {
-    for (const restaurant of restaurants) {
-      restaurant.coverImage =
-        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fcooking.nytimes.com%2Frecipes%2F1024748-shoyu-ramen&psig=AOvVaw1eoZWpT4yAjDHJQ94ZUO2s&ust=1739004242862000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCOjx6OiVsYsDFQAAAAAdAAAAABAE";
-      restaurant.restaurantLocation = "Tokyo, Japan";
-    }
-    return restaurants;
-  }
-  
   public async searchRestaurant(keyword: string) {
     const searchLimitSize = this.config.serverConfig.SEARCH_LIMIT;
     return await this.restaurantRepository.searchRestaurants(
@@ -135,58 +133,40 @@ class RestaurantService {
   }
 
   public async addRestaurant(restaurantData: Partial<Restaurant>) {
-
-    const apiData = await this.mapService.getPlaceInfoFromURL(restaurantData.location!,this.config.serverConfig.GOOGLE_MAPS_API_KEY);
-
-    if (!restaurantData.lat || !restaurantData.lon) {
-      // 📌 Google Maps の短縮 URL から緯度・経度を取得
-      restaurantData.lat = apiData.lat;
-      restaurantData.lon = apiData.lon;
-      if (!restaurantData.name) {
-        restaurantData.name = apiData.name;
-      }
+    if (!restaurantData.location) {
+      throw new Error("Restaurant not found");
     }
-
-    // 緯度・経度から city, country を取得
-    if (!restaurantData.city || !restaurantData.country) {
-      const locationData =
-        await this.mapService.getCityAndCountryFromCoordinates(
-          restaurantData.lat!,
-          restaurantData.lon!,
-        );
-      restaurantData.city = locationData.city;
-      restaurantData.country = locationData.country;
-    }
-
-    // データのバリデーション
-    if (
-      !restaurantData.name ||
-      !restaurantData.location ||
-      restaurantData.lat === undefined ||
-      restaurantData.lon === undefined ||
-      !restaurantData.city ||
-      !restaurantData.country
-    ) {
-      throw new Error("Missing required fields");
-    }
-    const locationLength = restaurantData.location?.length ?? 0;
-    if (locationLength > 255) {
-      restaurantData.location = `https://www.google.com/maps/place/?q=place_id:${apiData.placeId}`;
-    }
-
-    // レストランをデータベースに保存
-    const newRestaurant =
-      await this.restaurantRepository.createRestaurant(restaurantData);
-
-    // 返却データを DTO 形式に変換
-    return new HomePageDTO(
-      newRestaurant.restaurant_id,
-      newRestaurant.name,
-      "", // 画像のデフォルト値
-      0, // 初期の評価
-      newRestaurant.location,
-      `${newRestaurant.city}, ${newRestaurant.country}`,
+    const restaurantDetails = await this.mapService.getPlaceDetails(
+      restaurantData.location,
     );
+    this.mapRestaurantDetails(restaurantData, restaurantDetails);
+
+    return await this.restaurantRepository.createRestaurant(restaurantData);
+  }
+
+  private mapRestaurantDetails(
+    restaurantData: Partial<Restaurant>,
+    restaurantDetails: Place,
+  ) {
+    restaurantData.lat = restaurantDetails.geometry?.location.lat;
+    restaurantData.lon = restaurantDetails.geometry?.location.lng;
+    restaurantData.address = restaurantDetails.formatted_address;
+    restaurantData.delivery = restaurantDetails.delivery ?? true;
+    restaurantData.dine_in = restaurantDetails.dine_in ?? true;
+    restaurantData.open_date =
+      restaurantDetails.opening_hours?.weekday_text.join(";");
+    restaurantData.country = restaurantDetails.address_components?.filter((x) =>
+      x.types.includes("country"),
+    )[0]?.long_name;
+    restaurantData.city = restaurantDetails.address_components?.filter(
+      (x) =>
+        x.types.includes("administrative_area_level_3") ||
+        x.types.includes("locality"),
+    )[0]?.long_name;
+    restaurantData.name = restaurantDetails.name;
+    restaurantData.location = restaurantDetails.url;
+    restaurantData.phone_number = restaurantDetails.international_phone_number ?? "";
+    restaurantData.price_level = restaurantDetails.price_level ?? -1;
   }
 }
 

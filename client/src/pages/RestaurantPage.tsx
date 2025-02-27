@@ -7,6 +7,7 @@ import "react-image-gallery/styles/css/image-gallery.css";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
 import "leaflet/dist/leaflet.css";
+import {FaCheck, FaClock, FaDollarSign, FaPhone, FaTimes, FaUtensils} from "react-icons/fa";
 
 interface Restaurant {
   restaurantId: number;
@@ -18,6 +19,12 @@ interface Restaurant {
   latitude: number;
   longitude: number;
   reviewImages: string[];
+  "address": string;
+  "phone_number": string;
+  "delivery": boolean;
+  "dine_in": boolean;
+  "open_hour": string[];
+  "price_level": number;
 }
 
 interface Review {
@@ -160,35 +167,34 @@ const RestaurantPage: React.FC = () => {
                   ))}
                 </div>
               </div>
-              <div className="restaurant-page-map-container">
-                <div className="restaurant-page-map-header">Map</div>
-                <MapContainer
-                  center={[coordinates[0], coordinates[1]]}
-                  zoom={16}
-                  style={{ height: "300px", width: "300px" }}
-                  scrollWheelZoom={false} // Disable zooming
-                  dragging={false} // Disable dragging for a static effect
-                  doubleClickZoom={false} // Disable double-click zoom
-                  touchZoom={false} // Disable touch zooming
-                  zoomControl={false} // Hide zoom control
-                >
-                  <TileLayer
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                  />
-                  <Marker position={[coordinates[0], coordinates[1]]}>
-                    <Popup>Restaurant</Popup>
-                  </Marker>
-                </MapContainer>
-                <a
-                  href={googleMapUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <button className="google-map-button">
-                    Open in Google Maps
-                  </button>
-                </a>
+              <div className="restaurant-restaurant-type">
+                <span className="service-header">Services</span>
+                <div className="service-item">
+                  {restaurant?.dine_in ? (
+                      <FaCheck className="service-icon check" />
+                  ) : (
+                      <FaTimes className="service-icon cross" />
+                  )}
+                  <span className="service-item-text">Dine in </span>
+                </div>
+                <div className="service-item">
+                  {restaurant?.delivery ? (
+                      <FaCheck className="service-icon check" />
+                  ) : (
+                      <FaTimes className="service-icon cross" />
+                  )}
+                  <span className="service-item-text">Delivery </span>
+                </div>
+              </div>
+              <div className="restaurant-hours-container">
+                <h3 className="hours-title">
+                  Operation Time <FaClock className="clock-icon" />
+                </h3>
+                <ul className="hours-list">
+                  {restaurant?.open_hour.map((day, index) => (
+                      <li key={index} className="hours-item">{day}</li>
+                  ))}
+                </ul>
               </div>
             </div>
             <div className="restaurant-page-main-container">
@@ -199,6 +205,54 @@ const RestaurantPage: React.FC = () => {
                   showPlayButton={false}
                   showNav={false}
                 />
+              </div>
+              <div className="restaurant-page-information-container">
+                  {/* Left Side - Map */}
+                  <div className="map-wrapper">
+                    <MapContainer
+                        center={[coordinates[0], coordinates[1]]}
+                        zoom={16}
+                        style={{ height: "180px", width: "180px", borderRadius: "10px" }}
+                        scrollWheelZoom={false} // Disable zooming
+                        dragging={false} // Disable dragging for a static effect
+                        doubleClickZoom={false} // Disable double-click zoom
+                        touchZoom={false} // Disable touch zooming
+                        zoomControl={false} // Hide zoom control
+                    >
+                      <TileLayer
+                          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                          // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                      />
+                      <Marker position={[coordinates[0], coordinates[1]]}>
+                        <Popup>Restaurant</Popup>
+                      </Marker>
+                    </MapContainer>
+                  </div>
+
+                  {/* Right Side - Information */}
+                  <div className="restaurant-info">
+                    <div className="info-row">
+                      <span className="info-value">{restaurant?.address}</span>
+                      <a className="direction-button" href={googleMapUrl} target="_blank" rel="noopener noreferrer">
+                        Google Maps
+                      </a>
+                    </div>
+                    <div className="info-row">
+                      <span>
+                        <span className="info-title">Phone number: </span>
+                        <span className="info-value">{restaurant?.phone_number}</span>
+                      </span>
+                      <FaPhone className="info-icon" />
+                    </div>
+                    <div className="info-row">
+                      <span>
+                        <span className="info-title">Price: </span>
+                        {console.log(restaurant?.price_level)}
+                        <span className="info-value">{restaurant?.price_level && restaurant.price_level != -1 ? "$".repeat(restaurant.price_level + 1) : "  -  "}</span>
+                      </span>
+                      <FaDollarSign className="info-icon" />
+                    </div>
+                  </div>
               </div>
               <div className="restaurant-page-review-section">
                 <div className="restaurant-page-review-header">Reviews</div>

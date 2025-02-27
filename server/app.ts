@@ -10,15 +10,17 @@ import MinioConnection from "./utils/minioConnection";
 import imageRoutes from "./routes/imageRoutes";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import reviewRouter from "./routes/reviewRoutes";
+import logger from "./middleware/logger";
 
 let config = container.get<Config>(SERVICE_IDENTIFIER.CONFIG);
+container.applyMiddleware(logger)
 
 const app = express();
 
 // Enable CORS Middleware
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:5174"],// Allow requests from React frontend
+    origin: ["http://localhost:5173", "http://localhost:5174"], // Allow requests from React frontend
     methods: ["POST", "GET", "OPTIONS"],
     allowedHeaders: ["Content-Type"],
   }),
