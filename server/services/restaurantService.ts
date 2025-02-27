@@ -60,7 +60,7 @@ class RestaurantService {
   }
 
   private getReviewPageDTO(restaurant: Restaurant) {
-    const coverImage = this.getCoverImageUrl(restaurant);
+    const coverImage = this.getTopReview(restaurant).picture_url;
     const averageRating = this.calculateAverageReview(restaurant);
     const restaurantAddress = this.getRestaurantAddress(restaurant);
     const reviewImages = this.getReviewImages(restaurant.reviews);
@@ -87,7 +87,8 @@ class RestaurantService {
     const restaurantWithRating = restaurants.map((restaurant) => {
       const reviewCount = restaurant.reviews.length;
       const averageReview = this.calculateAverageReview(restaurant);
-      const imageUrl = this.getCoverImageUrl(restaurant);
+      const topReview = this.getTopReview(restaurant);
+      const imageUrl = topReview.picture_url;
       const restaurantAddress = this.getRestaurantAddress(restaurant);
       return new HomePageDTO(
         restaurant.restaurant_id,
@@ -96,9 +97,10 @@ class RestaurantService {
         averageReview,
         restaurant.location,
         restaurantAddress,
-        restaurant.phone_number,
         restaurant.price_level,
         reviewCount,
+          topReview.comment,
+          topReview.reviewer_name
       );
     });
 
@@ -117,11 +119,11 @@ class RestaurantService {
     });
   }
 
-  private getCoverImageUrl(restaurant: Restaurant) {
+  private getTopReview(restaurant: Restaurant) {
     const topReview = restaurant.reviews.sort((reviewA, reviewB) => {
       return reviewB.rating - reviewA.rating;
     });
-    return topReview[0].picture_url;
+    return topReview[0];
   }
 
   private calculateAverageReview(restaurant: Restaurant) {

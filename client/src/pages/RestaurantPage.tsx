@@ -19,12 +19,11 @@ interface Restaurant {
   latitude: number;
   longitude: number;
   reviewImages: string[];
-  "address": string;
-  "phone_number": string;
-  "delivery": boolean;
-  "dine_in": boolean;
-  "open_hour": string[];
-  "price_level": number;
+  phone_number: string;
+  delivery: boolean;
+  dine_in: boolean;
+  open_hour: string[];
+  price_level: number;
 }
 
 interface Review {

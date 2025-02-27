@@ -13,39 +13,31 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.page-container {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-}
-
-.content-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
-  max-width: 1200px;
-  width: 100%;
-}
-
 .card {
   background-color: #333;
   padding: 16px;
   border-radius: 10px;
   text-align: center;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+  margin-bottom: 20px;
+  width: 60%;
+  position: relative;
+}
+
+.flex {
+  display: flex;
 }
 
 .card-image {
-  width: 100%;
-  /* height: 150px; */
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
   background-color: #444;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 8px;
-  margin-bottom: 10px;
+  margin-right: 16px;
 }
 
 .card-title {
@@ -148,6 +140,11 @@
 
 .star {
   font-size: 24px;
+  margin: 0 2px;
+}
+
+.star-medium {
+  font-size: 16px;
   margin: 0 2px;
 }
 
@@ -319,7 +316,7 @@
 
 /*Restaurant page css*/
 
-.restaurant-page-container {
+.page-container {
   margin-top: 20px;
   min-height: 100vh;
   display: flex;
@@ -571,7 +568,7 @@
 }
 
 @media only screen and (min-width: 601px) {
-  .restaurant-page-container {
+  .page-container {
     width: 90%;
   }
 }
@@ -580,4 +577,73 @@
   width: 100%;
   height: auto;
   object-fit: cover;
+}
+
+/*Home page*/
+
+.rating-badge {
+  background-color: #5e4b0d;
+  height: fit-content;
+  padding: 2px 5px 2px 8px;
+  border-radius: 5px;
+  width: fit-content;
+  margin-right: 10px;
+  text-align: left;
+}
+
+.rating-badge-value {
+  font-weight: bold;
+}
+
+.card-header {
+  justify-content: left;
+  text-align: left;
+  font-weight: bold;
+}
+
+.card-address {
+  margin-top: 5px;
+}
+
+.card-meta {
+  justify-content: right;
+  text-align: right;
+  margin-right: 0;
+  margin-left: auto;
+}
+
+.card-body {
+  width: 95%;
+}
+
+.light-grey-bg {
+  background-color: #666;
+}
+
+.card-comment {
+  position: absolute;
+  margin-top: 5px;
+  border-radius: 10px;
+  max-height: 35%;
+  padding: 5px 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Limit to 2 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  width: 60%;
+  /*background: linear-gradient(to bottom, rgb(102, 102, 102) 60%, rgb(129, 129, 129) 100%);*/
+}
+
+.card-sub-title {
+  margin-top: 10px;
+  font-weight: bold;
+  text-align: left;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.card-body-text {
+  text-align: left;
 }

@@ -9,6 +9,10 @@ interface Restaurant {
   averageRating: number;
   googleMapUrl: string;
   restaurantLocation: string;
+  priceLevel: number;
+  reviewCount: number;
+  review: string;
+  reviewer: string;
 }
 
 // for the API
@@ -19,7 +23,7 @@ interface ApiResponse {
 
 // Production: fetch data from the API
 const fetchRestaurants = async (): Promise<ApiResponse> => {
-  const response = await fetch("http://localhost:8000/restaurant/");
+  const response = await fetch("http://localhost:8000/restaurant/home/1");
   if (!response.ok) {
     throw new Error("Failed to fetch data");
   }
@@ -54,11 +58,11 @@ const HomePage = () => {
       ) : error ? (
         <p>error: {error}</p>
       ) : (
-        <div className="content-grid">
+        <>
           {restaurants.map((restaurant, index) => (
             <RestaurantCard key={index} restaurant={restaurant} />
           ))}
-        </div>
+        </>
       )}
     </div>
   );
