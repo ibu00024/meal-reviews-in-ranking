@@ -35,8 +35,8 @@ class RestaurantService {
       restaurantWithReviews,
     );
     const slicedRestaurantWithReviews = filteredRestaurantWithReviews.slice(
-        (page - 1) * this.config.serverConfig.PAGE_SIZE,
-        page * this.config.serverConfig.PAGE_SIZE
+      (page - 1) * this.config.serverConfig.PAGE_SIZE,
+      page * this.config.serverConfig.PAGE_SIZE,
     );
     return this.completeRestaurantData(slicedRestaurantWithReviews);
   }
@@ -96,9 +96,9 @@ class RestaurantService {
         averageReview,
         restaurant.location,
         restaurantAddress,
-          restaurant.phone_number,
-          restaurant.price_level,
-        reviewCount
+        restaurant.phone_number,
+        restaurant.price_level,
+        reviewCount,
       );
     });
 
@@ -173,7 +173,8 @@ class RestaurantService {
     )[0]?.long_name;
     restaurantData.name = restaurantDetails.name;
     restaurantData.location = restaurantDetails.url;
-    restaurantData.phone_number = restaurantDetails.international_phone_number ?? "";
+    restaurantData.phone_number =
+      restaurantDetails.international_phone_number ?? "";
     restaurantData.price_level = restaurantDetails.price_level ?? -1;
   }
 }
