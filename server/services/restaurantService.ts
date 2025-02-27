@@ -28,13 +28,17 @@ class RestaurantService {
     this.mapService = mapService;
   }
 
-  public async getAllRestaurantByRanking() {
+  public async getAllRestaurantByRanking(page: number) {
     const restaurantWithReviews =
       await this.restaurantRepository.getAllRestaurantsWithReviews();
     const filteredRestaurantWithReviews = this.validateRestaurantReviews(
       restaurantWithReviews,
     );
-    return this.completeRestaurantData(filteredRestaurantWithReviews);
+    const slicedRestaurantWithReviews = filteredRestaurantWithReviews.slice(
+        (page - 1) * this.config.serverConfig.PAGE_SIZE,
+        page * this.config.serverConfig.PAGE_SIZE
+    );
+    return this.completeRestaurantData(slicedRestaurantWithReviews);
   }
 
   public async getRestaurantById(id: number) {
@@ -81,6 +85,7 @@ class RestaurantService {
 
   public completeRestaurantData(restaurants: Restaurant[]) {
     const restaurantWithRating = restaurants.map((restaurant) => {
+      const reviewCount = restaurant.reviews.length;
       const averageReview = this.calculateAverageReview(restaurant);
       const imageUrl = this.getCoverImageUrl(restaurant);
       const restaurantAddress = this.getRestaurantAddress(restaurant);
@@ -91,6 +96,9 @@ class RestaurantService {
         averageReview,
         restaurant.location,
         restaurantAddress,
+          restaurant.phone_number,
+          restaurant.price_level,
+        reviewCount
       );
     });
 

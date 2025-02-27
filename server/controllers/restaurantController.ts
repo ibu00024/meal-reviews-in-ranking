@@ -20,9 +20,10 @@ class RestaurantController {
   }
 
   public async getAllRestaurants(req: Request, res: Response) {
+    const page = req.params.page as unknown as number;
     try {
       const restaurants =
-        await this.restaurantService.getAllRestaurantByRanking();
+        await this.restaurantService.getAllRestaurantByRanking(page);
       res.status(200).json({ success: true, data: restaurants });
     } catch (error) {
       res.status(500).json({
