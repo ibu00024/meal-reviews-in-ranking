@@ -7,6 +7,8 @@ class ServerConfig {
   DEBUG: boolean = true;
 
   SEARCH_LIMIT: number = 10;
+
+  PAGE_SIZE: number = 20;
 }
 
 export default ServerConfig;

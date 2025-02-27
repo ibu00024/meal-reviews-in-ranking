@@ -28,13 +28,17 @@ class RestaurantService {
     this.mapService = mapService;
   }
 
-  public async getAllRestaurantByRanking() {
+  public async getAllRestaurantByRanking(page: number) {
     const restaurantWithReviews =
       await this.restaurantRepository.getAllRestaurantsWithReviews();
     const filteredRestaurantWithReviews = this.validateRestaurantReviews(
       restaurantWithReviews,
     );
-    return this.completeRestaurantData(filteredRestaurantWithReviews);
+    const slicedRestaurantWithReviews = filteredRestaurantWithReviews.slice(
+      (page - 1) * this.config.serverConfig.PAGE_SIZE,
+      page * this.config.serverConfig.PAGE_SIZE,
+    );
+    return this.completeRestaurantData(slicedRestaurantWithReviews);
   }
 
   public async getRestaurantById(id: number) {
@@ -56,7 +60,7 @@ class RestaurantService {
   }
 
   private getReviewPageDTO(restaurant: Restaurant) {
-    const coverImage = this.getCoverImageUrl(restaurant);
+    const coverImage = this.getTopReview(restaurant).picture_url;
     const averageRating = this.calculateAverageReview(restaurant);
     const restaurantAddress = this.getRestaurantAddress(restaurant);
     const reviewImages = this.getReviewImages(restaurant.reviews);
@@ -81,8 +85,10 @@ class RestaurantService {
 
   public completeRestaurantData(restaurants: Restaurant[]) {
     const restaurantWithRating = restaurants.map((restaurant) => {
+      const reviewCount = restaurant.reviews.length;
       const averageReview = this.calculateAverageReview(restaurant);
-      const imageUrl = this.getCoverImageUrl(restaurant);
+      const topReview = this.getTopReview(restaurant);
+      const imageUrl = topReview.picture_url;
       const restaurantAddress = this.getRestaurantAddress(restaurant);
       return new HomePageDTO(
         restaurant.restaurant_id,
@@ -91,6 +97,10 @@ class RestaurantService {
         averageReview,
         restaurant.location,
         restaurantAddress,
+        restaurant.price_level,
+        reviewCount,
+          topReview.comment,
+          topReview.reviewer_name
       );
     });
 
@@ -109,11 +119,11 @@ class RestaurantService {
     });
   }
 
-  private getCoverImageUrl(restaurant: Restaurant) {
+  private getTopReview(restaurant: Restaurant) {
     const topReview = restaurant.reviews.sort((reviewA, reviewB) => {
       return reviewB.rating - reviewA.rating;
     });
-    return topReview[0].picture_url;
+    return topReview[0];
   }
 
   private calculateAverageReview(restaurant: Restaurant) {
@@ -165,7 +175,8 @@ class RestaurantService {
     )[0]?.long_name;
     restaurantData.name = restaurantDetails.name;
     restaurantData.location = restaurantDetails.url;
-    restaurantData.phone_number = restaurantDetails.international_phone_number ?? "";
+    restaurantData.phone_number =
+      restaurantDetails.international_phone_number ?? "";
     restaurantData.price_level = restaurantDetails.price_level ?? -1;
   }
 }

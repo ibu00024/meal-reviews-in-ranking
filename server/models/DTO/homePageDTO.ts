@@ -5,6 +5,10 @@ class HomePageDTO {
   averageRating: number | undefined;
   googleMapUrl: string | undefined;
   restaurantLocation: string | undefined;
+  priceLevel: number | undefined;
+  reviewCount: number | undefined;
+  review: string | undefined;
+  reviewer: string | undefined;
 
   constructor(
     restaurantId: number | undefined,
@@ -13,6 +17,10 @@ class HomePageDTO {
     averageRating: number | undefined,
     googleMapUrl: string | undefined,
     restaurantLocation: string | undefined,
+    priceLevel: number | undefined,
+    reviewCount: number | undefined,
+    review: string | undefined,
+    reviewer: string | undefined,
   ) {
     this.restaurantId = restaurantId;
     this.restaurantName = restaurantName;
@@ -20,6 +28,10 @@ class HomePageDTO {
     this.averageRating = averageRating;
     this.googleMapUrl = googleMapUrl;
     this.restaurantLocation = restaurantLocation;
+    this.priceLevel = priceLevel;
+    this.reviewCount = reviewCount;
+    this.review = review;
+    this.reviewer = reviewer;
   }
 }
 

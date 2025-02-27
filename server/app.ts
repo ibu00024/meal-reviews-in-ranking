@@ -13,7 +13,7 @@ import reviewRouter from "./routes/reviewRoutes";
 import logger from "./middleware/logger";
 
 let config = container.get<Config>(SERVICE_IDENTIFIER.CONFIG);
-container.applyMiddleware(logger)
+container.applyMiddleware(logger);
 
 const app = express();
 

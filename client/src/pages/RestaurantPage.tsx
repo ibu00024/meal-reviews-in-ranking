@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import StarRating from "../components/StarRating";
 import ReviewCard from "../components/ReviewCard";
 import { useParams } from "react-router-dom";
@@ -7,7 +7,7 @@ import "react-image-gallery/styles/css/image-gallery.css";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
 import "leaflet/dist/leaflet.css";
-import {FaCheck, FaClock, FaDollarSign, FaPhone, FaTimes, FaUtensils} from "react-icons/fa";
+import {FaCheck, FaClock, FaDollarSign, FaPhone, FaTimes} from "react-icons/fa";
 
 interface Restaurant {
   restaurantId: number;
@@ -19,12 +19,11 @@ interface Restaurant {
   latitude: number;
   longitude: number;
   reviewImages: string[];
-  "address": string;
-  "phone_number": string;
-  "delivery": boolean;
-  "dine_in": boolean;
-  "open_hour": string[];
-  "price_level": number;
+  phone_number: string;
+  delivery: boolean;
+  dine_in: boolean;
+  open_hour: string[];
+  price_level: number;
 }
 
 interface Review {
@@ -126,7 +125,7 @@ const RestaurantPage: React.FC = () => {
   }, []);
 
   return (
-    <div className="restaurant-page-container">
+    <div className="page-container">
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
@@ -144,8 +143,8 @@ const RestaurantPage: React.FC = () => {
             </div>
             <div className="restaurant-card-rating">
               <StarRating rating={restaurant?.averageRating || 0} />
-              <span className="rating-text">
-                {restaurant?.averageRating.toFixed(1)}/5
+              <span className="review-card-star-number">
+                {restaurant?.averageRating.toFixed(1)}
               </span>
             </div>
           </div>
@@ -247,7 +246,6 @@ const RestaurantPage: React.FC = () => {
                     <div className="info-row">
                       <span>
                         <span className="info-title">Price: </span>
-                        {console.log(restaurant?.price_level)}
                         <span className="info-value">{restaurant?.price_level && restaurant.price_level != -1 ? "$".repeat(restaurant.price_level + 1) : "  -  "}</span>
                       </span>
                       <FaDollarSign className="info-icon" />

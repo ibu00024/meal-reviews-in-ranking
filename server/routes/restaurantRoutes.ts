@@ -8,7 +8,7 @@ const restaurantController = container.get<RestaurantController>(
   SERVICE_IDENTIFIER.RESTAURANT_CONTROLLER,
 );
 
-restaurantRouter.get("/", restaurantController.getAllRestaurants);
+restaurantRouter.get("/home/:page", restaurantController.getAllRestaurants);
 restaurantRouter.get("/search", restaurantController.searchRestaurant);
 restaurantRouter.get("/:id", restaurantController.getRestaurantById);
 
